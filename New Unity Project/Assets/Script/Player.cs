@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     private Vector2 Crouch_Collider_Offset;
     private Vector2 Idel_Collider_Size;
     private Vector2 Idel_Collider_Offset;
+    private bool crash_wall;
 
     // Start is called before the first frame update
     void Start()
@@ -153,6 +154,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Bottom" && animator.GetBool("Player_Down"))
         {
             bc2.isTrigger = false;
+            crash_wall = false;
             Debug.Log("Bottom");
             jump = false;
             animator.SetBool("Player_Down", false);
@@ -163,7 +165,6 @@ public class Player : MonoBehaviour
     {
         if (collision.transform.tag == "Wall")
         {
-            Debug.Log(transform.position.x);
             collision_pos_x = transform.position.x ;
             transform.position = new Vector3(collision_pos_x, transform.position.y, transform.position.z);
         }
@@ -173,7 +174,11 @@ public class Player : MonoBehaviour
     {
         if (collision.transform.tag == "Wall")
         {
-
+            if(!crash_wall)
+            {
+                collision_pos_x = transform.position.x;
+                crash_wall = true;
+            }
             transform.position = new Vector3(collision_pos_x, transform.position.y, transform.position.z);
         }
     }
