@@ -53,13 +53,13 @@ public class Player : MonoBehaviour
             GameObject inst = Instantiate(bullet) as GameObject;
             if (right)
             {
-                inst.transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z);
-                inst.GetComponent<Rigidbody2D>().AddForce(new Vector2(4f, 0), ForceMode2D.Impulse);
+                inst.transform.position = new Vector3(bc2.bounds.center.x, bc2.bounds.center.y, 0);
+                inst.GetComponent<Rigidbody2D>().velocity = new Vector2(4f, 0);
             }
             else if (!right)
             {
-                inst.transform.position = new Vector3(transform.position.x - 0.1f, transform.position.y, transform.position.z);
-                inst.GetComponent<Rigidbody2D>().AddForce(new Vector2(-4f, 0), ForceMode2D.Impulse);
+                inst.transform.position = new Vector3(bc2.bounds.center.x , bc2.bounds.center.y, 0);
+                inst.GetComponent<Rigidbody2D>().velocity = new Vector2(-4f, 0);
             }
         }
     }

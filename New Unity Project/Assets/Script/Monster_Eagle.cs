@@ -15,6 +15,7 @@ public class Monster_Eagle : MonoBehaviour
     private float findPlayerTime;
     private bool attackTurn;
     private float posTime;
+    private float playerPos;
 
     // Start is called before the first frame update
     void Start()
@@ -26,15 +27,17 @@ public class Monster_Eagle : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
         findPlayer = false;
         right = false;
+        playerPos = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Time.time - attackTime > 3 && findPlayer && !attackTurn)
+        if (Time.time - attackTime > 2 && findPlayer && !attackTurn)
         {
             findPlayer = false;
         }
+
 
         Moving();
         Finding(Vector3.left);
@@ -43,20 +46,47 @@ public class Monster_Eagle : MonoBehaviour
 
     private void Moving()
     {
-        if (Time.time - posTime > 1.5f && !findPlayer)
+        if (!findPlayer)
         {
-            posTime = Time.time;
+            if (Time.time - posTime > 1.5f && !findPlayer)
+            {
+                posTime = Time.time;
+                if (right)
+                    right = false;
+                else if (!right)
+                    right = true;
+            }
             if (right)
             {
                 transform.rotation = new Quaternion(0, 180, 0, 0);
-                rd2d.AddForce(new Vector2(2f, 0), ForceMode2D.Impulse);
-                right = false;
+                rd2d.velocity = new Vector2(0.5f, rd2d.velocity.y);
+                //  right = false;
             }
             else if (!right)
             {
                 transform.rotation = new Quaternion(0, 0, 0, 0);
-                rd2d.AddForce(new Vector2(-2f, 0), ForceMode2D.Impulse);
-                right = true;
+                rd2d.velocity = new Vector2(-0.5f, rd2d.velocity.y);
+                //  right = true;
+            }
+        }
+
+        if(findPlayer)
+        {
+            if(right)
+            {
+                if(playerPos<transform.position.x)
+                {
+                    rd2d.velocity = new Vector2(0f, 0f);
+                    animator.SetBool("Find", false);
+                }
+            }
+            else if(!right)
+            {
+                if(playerPos>transform.position.x)
+                {
+                    rd2d.velocity = new Vector2(0f, 0f);
+                    animator.SetBool("Find", false);
+                }
             }
         }
     }
@@ -77,16 +107,21 @@ public class Monster_Eagle : MonoBehaviour
                     findPlayerTime = Time.time;
                     attackTurn = true;
                     findPlayer = true;
+                    playerPos = hit.transform.position.x;
                     Debug.Log("빔");
-                    if (hit.transform.position.x - transform.position.x > 0)
+                    if (playerPos - transform.position.x > 0)
                     {
                         right = true;
                         transform.rotation = new Quaternion(0, 180, 0, 0);
+                        rd2d.velocity = new Vector2(0f, rd2d.velocity.y);
+                        playerPos += 0.5f;
                     }
-                    else if (hit.transform.position.x - transform.position.x < 0)
+                    else if (playerPos - transform.position.x < 0)
                     {
                         right = false;
                         transform.rotation = new Quaternion(0, 0, 0, 0);
+                        rd2d.velocity = new Vector2(0f, rd2d.velocity.y);
+                        playerPos -= 0.5f;
                     }
                 }
             }
@@ -97,18 +132,22 @@ public class Monster_Eagle : MonoBehaviour
 
     private void Attack()
     {
-        animator.SetBool("Find", false);
         attackTime = Time.time;
         attackTurn = false;
-        animator.enabled = true;
         if (right)
         {
-            rd2d.AddForce(new Vector2(4f, 0f), ForceMode2D.Impulse);
+            rd2d.velocity = new Vector2(3f, rd2d.velocity.y);
         }
         else if(!right)
         {
-            rd2d.AddForce(new Vector2(-4f, 0f), ForceMode2D.Impulse);
-
+            rd2d.velocity = new Vector2(-3f, rd2d.velocity.y);
         }
+    }
+    
+    public void Set_hp(int damage)
+    {
+        hp -= damage;
+        if (hp <= 0)
+            DestroyObject(this.gameObject);
     }
 }

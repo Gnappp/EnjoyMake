@@ -19,10 +19,22 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.tag=="Wall"||collision.transform.tag=="Bottom")
+        if(collision.transform.tag=="Monster")
         {
-            DestroyObject(this.gameObject);
+            if(collision.gameObject.name=="Monster_Eagle")
+            {
+                Monster_Eagle mob = collision.gameObject.GetComponent<Monster_Eagle>();
+                mob.Set_hp(1);
+            }
+            else if (collision.gameObject.name == "Monster_Opossum")
+            {
+                Debug.Log("hit opos");
+                Monster_Opossum mob = collision.gameObject.GetComponent<Monster_Opossum>();
+                mob.Set_hp(1);
+            }
         }
+        if(!(collision.transform.tag=="Player"))
+            DestroyObject(this.gameObject);
     }
 
 }
