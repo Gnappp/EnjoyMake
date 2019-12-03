@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
         Crouch_Collider_Offset = new Vector2(-0.008840397f, -0.1000003f);
     }
 
-  
+
     // Update is called once per frame
     void Update()
     {
@@ -58,7 +58,7 @@ public class Player : MonoBehaviour
             }
             else if (!right)
             {
-                inst.transform.position = new Vector3(bc2.bounds.center.x , bc2.bounds.center.y, 0);
+                inst.transform.position = new Vector3(bc2.bounds.center.x, bc2.bounds.center.y, 0);
                 inst.GetComponent<Rigidbody2D>().velocity = new Vector2(-4f, 0);
             }
         }
@@ -71,22 +71,46 @@ public class Player : MonoBehaviour
             jump = true;
             bc2.isTrigger = true;
             animator.SetTrigger("Player_Jump");
-            Debug.Log("Player Jump!");
         }
-        if (rb2.velocity.y < -0 && !animator.GetBool("Player_Down"))
+        if (rb2.velocity.y < -0.1 && !animator.GetBool("Player_Down"))
         {
             animator.SetBool("Player_Down", true);
             bc2.isTrigger = false;
             jump = true;
             jumpchance = false;
-            Debug.Log("false");
+            crash_wall = false;
         }
 
         Jumping();
     }
-    
+
     private void Moving()
     {
+        if (crash_wall)
+        {
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                if (!right)
+                {
+                    if (Input.GetKey(KeyCode.RightArrow))
+                    {
+                        transform.position += new Vector3(0.1f, 0) * 10 * Time.deltaTime;
+                        transform.rotation = new Quaternion(0, 0, 0, 0);
+                        right = true;
+                    }
+                }
+                else if (right)
+                {
+                    if (Input.GetKey(KeyCode.LeftArrow))
+                    {
+                        transform.position += new Vector3(-0.1f, 0) * 10 * Time.deltaTime;
+                        transform.rotation = new Quaternion(0, 0, 0, 0);
+                        right = true;
+                    }
+                }
+            }
+        }
+
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow))
         {
             if (!animator.GetBool("Player_Move") && !jump)
@@ -120,7 +144,6 @@ public class Player : MonoBehaviour
             if (!animator.GetBool("Player_Crouch"))
             {
                 animator.SetBool("Player_Crouch", true);
-                Debug.Log("Crouch");
                 bc2.size = Crouch_Collider_Size;
                 bc2.offset = Crouch_Collider_Offset;
             }
@@ -131,7 +154,6 @@ public class Player : MonoBehaviour
             if (animator.GetBool("Player_Crouch"))
             {
                 animator.SetBool("Player_Crouch", false);
-                Debug.Log("DownArrow Key Up!");
                 bc2.size = Idel_Collider_Size;
                 bc2.offset = Idel_Collider_Offset;
             }
@@ -155,18 +177,33 @@ public class Player : MonoBehaviour
         {
             bc2.isTrigger = false;
             crash_wall = false;
-            Debug.Log("Bottom");
             jump = false;
             animator.SetBool("Player_Down", false);
         }
     }
+   
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.tag == "Wall")
         {
-            collision_pos_x = transform.position.x ;
+            crash_wall = true;
+            collision_pos_x = transform.position.x;
+            if (right)
+                collision_pos_x -= 0.03f;
+            else if (!right)
+                collision_pos_x += 0.03f;
             transform.position = new Vector3(collision_pos_x, transform.position.y, transform.position.z);
+        }
+
+        if (collision.transform.tag == "Debuff")
+        {
+            Debug.Log("Debuff");
+        }
+
+        if(collision.transform.tag=="Monster")
+        {
+            Debug.Log("Hit");
         }
     }
 
@@ -174,13 +211,31 @@ public class Player : MonoBehaviour
     {
         if (collision.transform.tag == "Wall")
         {
-            if(!crash_wall)
+            if (!crash_wall)
             {
                 collision_pos_x = transform.position.x;
-                crash_wall = true;
+                if (right)
+                    collision_pos_x -= 0.03f;
+                else if (!right)
+                    collision_pos_x += 0.03f;
             }
             transform.position = new Vector3(collision_pos_x, transform.position.y, transform.position.z);
+            crash_wall = true;
         }
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        crash_wall = false;
+    }
+
+    //void OnCollisionEnter2D(Collision2D collision)
+    //{ 
+    //    if (collision.gameObject.tag == "Bottom" && jump &&!animator.GetBool("Player_Down"))
+    //    {
+    //        Collider2D collider = gameObject.GetComponent<Collider2D>();
+    //        Debug.Log("??");
+    //        Physics2D.IgnoreCollision(collision.collider, collider, true);
+    //    }
+    //}
 }

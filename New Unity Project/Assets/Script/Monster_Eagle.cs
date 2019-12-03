@@ -33,15 +33,17 @@ public class Monster_Eagle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time - attackTime > 2 && findPlayer && !attackTurn)
+        if (!animator.GetBool("Death"))
         {
-            findPlayer = false;
+            if (Time.time - attackTime > 2 && findPlayer && !attackTurn)
+            {
+                findPlayer = false;
+            }
+
+            Moving();
+            Finding(Vector3.left);
+            Finding(Vector3.right);
         }
-
-
-        Moving();
-        Finding(Vector3.left);
-        Finding(Vector3.right);
     }
 
     private void Moving()
@@ -108,7 +110,6 @@ public class Monster_Eagle : MonoBehaviour
                     attackTurn = true;
                     findPlayer = true;
                     playerPos = hit.transform.position.x;
-                    Debug.Log("빔");
                     if (playerPos - transform.position.x > 0)
                     {
                         right = true;
@@ -143,11 +144,29 @@ public class Monster_Eagle : MonoBehaviour
             rd2d.velocity = new Vector2(-3f, rd2d.velocity.y);
         }
     }
-    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.tag == "Wall")
+        {
+            rd2d.velocity = new Vector2(0f, 0f);
+            animator.SetBool("Find", false);
+        }
+
+        if (collision.transform.tag == "Bullet")
+        {
+            Bullet bullet = collision.GetComponent<Bullet>();
+            Set_hp(bullet.Get_Damage());
+        }
+    }
     public void Set_hp(int damage)
     {
         hp -= damage;
         if (hp <= 0)
-            DestroyObject(this.gameObject);
+        {
+            rd2d.velocity = new Vector2(0f, 0f);
+            bc2d.enabled = false;
+            animator.SetBool("Death",true);
+            DestroyObject(this.gameObject, 0.5f);
+        }
     }
 }

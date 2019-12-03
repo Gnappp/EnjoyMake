@@ -9,6 +9,7 @@ public class Monster_Opossum : MonoBehaviour
     private float deathTime;
     private Rigidbody2D rd2d;
     private BoxCollider2D bc2d;
+    private Animator animator;
     private bool right;
     private bool death;
 
@@ -20,6 +21,7 @@ public class Monster_Opossum : MonoBehaviour
         life = 3;
         rd2d = gameObject.GetComponent<Rigidbody2D>();
         bc2d = gameObject.GetComponent<BoxCollider2D>();
+        animator = gameObject.GetComponent<Animator>();
         right = false;
         death = false;
     }
@@ -27,19 +29,22 @@ public class Monster_Opossum : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (death)
+        if (!animator.GetBool("Death"))
         {
-            if(Time.time-deathTime>2)
+            if (death)
             {
-                life--;
-                hp = 3;
-                bc2d.enabled = true;
-                death=false;
+                if (Time.time - deathTime > 2)
+                {
+                    life--;
+                    hp = 3;
+                    bc2d.enabled = true;
+                    death = false;
+                }
             }
-        }
-        if (!death)
-        {
-            Moving();
+            if (!death)
+            {
+                Moving();
+            }
         }
     }
 
@@ -66,11 +71,16 @@ public class Monster_Opossum : MonoBehaviour
             else if (!right)
                 right = true;
         }
+
+        if(collision.transform.tag=="Bullet")
+        {
+            Bullet bullet = collision.GetComponent<Bullet>();
+            Set_hp(bullet.Get_Damage());
+        }
     }
     public void Set_hp(int damage)
     {
         hp -= damage;
-        Debug.Log(hp);
         if (hp <= 0)
         {
             death = true;
@@ -80,7 +90,10 @@ public class Monster_Opossum : MonoBehaviour
         }
         if(life<=0)
         {
-            DestroyObject(this.gameObject);
+            rd2d.velocity = new Vector2(0f, 0f);
+            bc2d.enabled = false;
+            animator.SetBool("Death", true);
+            DestroyObject(this.gameObject,0.5f);
         }
     }
 }
