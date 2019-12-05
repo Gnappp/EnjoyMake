@@ -12,6 +12,7 @@ public class Monster_Opossum : MonoBehaviour
     private Animator animator;
     private bool right;
     private bool death;
+    private bool turning=false;
 
 
     // Start is called before the first frame update
@@ -50,6 +51,28 @@ public class Monster_Opossum : MonoBehaviour
 
     private void Moving()
     {
+        bc2d.enabled = false;
+        Vector2 pos_ptr = Vector2.zero;
+        if (right)
+            pos_ptr = new Vector2(transform.position.x + 0.05f, transform.position.y);
+        else if (!right)
+            pos_ptr = new Vector2(transform.position.x - 0.05f, transform.position.y);
+        bc2d.enabled = false;
+        RaycastHit2D hit = Physics2D.Raycast(pos_ptr, Vector2.down, 0.5f);
+        bc2d.enabled = true;
+        if (hit.collider == null && !turning)
+        {
+            right = !(right);
+            turning = true;
+        }
+        else if (hit.collider != null)
+        {
+            if (hit.collider.transform.tag == "Bottom" || hit.collider.transform.tag == "Wall")
+            {
+                turning = false;
+            }
+        }
+
         if (right)
         {
             rd2d.velocity = new Vector2(1f, rd2d.velocity.y);
@@ -62,7 +85,7 @@ public class Monster_Opossum : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.transform.tag=="Wall")
         {
@@ -71,13 +94,17 @@ public class Monster_Opossum : MonoBehaviour
             else if (!right)
                 right = true;
         }
+    }
 
-        if(collision.transform.tag=="Bullet")
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.tag == "Bullet" )
         {
             Bullet bullet = collision.GetComponent<Bullet>();
             Set_hp(bullet.Get_Damage());
         }
     }
+
     public void Set_hp(int damage)
     {
         hp -= damage;

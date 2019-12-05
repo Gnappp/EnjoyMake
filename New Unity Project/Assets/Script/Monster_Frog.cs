@@ -39,11 +39,11 @@ public class Monster_Frog : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!jumping)
+        if (!jumping)
         {
             float x = player.transform.position.x - gameObject.transform.position.x;
             float y = player.transform.position.y - gameObject.transform.position.y;
-            if (Mathf.Abs(x)<3 && Mathf.Abs(y)<3)
+            if (Mathf.Abs(x) < 3 && Mathf.Abs(y) < 3)
             {
                 if (x > 0)
                     right = true;
@@ -59,66 +59,47 @@ public class Monster_Frog : MonoBehaviour
                     right = true;
             }
         }
-        if (Time.time-idelTime > 2 && !animator.GetBool("Down") && !animator.GetBool("Jump"))
+        if (Time.time - idelTime > 2 && !animator.GetBool("Down") && !animator.GetBool("Jump"))
         {
-            animator.SetBool("Jump",true);
+            animator.SetBool("Jump", true);
             jumpTime = Time.time;
             bc2d.size = jumpSize;
             bc2d.offset = jumpOffset;
             jumping = true;
             if (!right)
             {
-                rd2d.velocity = new Vector2(-0.7f, 0.5f);
+                rd2d.AddForce(new Vector2(-0.9f, 2f), ForceMode2D.Impulse);
                 transform.rotation = new Quaternion(0, 0, 0, 0);
             }
             else if (right)
             {
-                rd2d.velocity = new Vector2(0.7f, 0.5f);
+                rd2d.AddForce(new Vector2(0.9f, 2f), ForceMode2D.Impulse);
                 transform.rotation = new Quaternion(0, 180, 0, 0);
             }
 
         }
 
-        if (animator.GetBool("Jump") && Time.time-jumpTime>0.5)
+        if (rd2d.velocity.y < -0.1f && !animator.GetBool("Down"))
         {
+            bc2d.size = idelSize;
+            bc2d.offset = idelOffset;
             animator.SetBool("Jump", false);
             animator.SetBool("Down", true);
-            landTime = Time.time;
-            bc2d.size = idelSize;
-            bc2d.offset = idelOffset;
-
-            if (!right)
-            {
-                rd2d.velocity = new Vector2(-0.3f, -0.6f);
-                transform.rotation = new Quaternion(0, 0, 0, 0);
-            }
-            else if (right)
-            {
-                rd2d.velocity = new Vector2(0.3f, -0.6f);
-                transform.rotation = new Quaternion(0, 180, 0, 0);
-            }
-            
-
         }
+    }
 
-        if(animator.GetBool("Down")&& !jumping)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Bottom" && animator.GetBool("Down"))
         {
-            rd2d.velocity = new Vector2(0f, 0f);
             animator.SetBool("Down", false);
             idelTime = Time.time;
-            bc2d.size = idelSize;
-            bc2d.offset = idelOffset;
+            jumping = false;
         }
-       
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.tag=="Bottom")
-        {
-            jumping = false;
-        }
-
         if (collision.transform.tag == "Bullet")
         {
             Bullet bullet = collision.GetComponent<Bullet>();

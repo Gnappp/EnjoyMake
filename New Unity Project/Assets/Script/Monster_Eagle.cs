@@ -16,6 +16,7 @@ public class Monster_Eagle : MonoBehaviour
     private bool attackTurn;
     private float posTime;
     private float playerPos;
+    private bool turning=false;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +44,28 @@ public class Monster_Eagle : MonoBehaviour
             Moving();
             Finding(Vector3.left);
             Finding(Vector3.right);
+
+            Vector2 pos_ptr=Vector2.zero;
+            if (right)
+                pos_ptr = new Vector2(transform.position.x + 0.05f, transform.position.y);
+            else if (!right)
+                pos_ptr = new Vector2(transform.position.x - 0.05f, transform.position.y);
+
+            bc2d.enabled = false;
+            RaycastHit2D hit = Physics2D.Raycast(pos_ptr, Vector2.down, 0.5f);
+            bc2d.enabled = true;
+            if (hit.collider == null && !turning)
+            {
+                rd2d.velocity = Vector2.zero;
+                turning = true;
+            }
+            else if (hit.collider != null)
+            {
+                if (hit.collider.transform.tag == "Bottom" || hit.collider.transform.tag == "Wall")
+                {
+                    turning = false;
+                }
+            }
         }
     }
 
@@ -143,15 +166,10 @@ public class Monster_Eagle : MonoBehaviour
         {
             rd2d.velocity = new Vector2(-3f, rd2d.velocity.y);
         }
+        animator.SetBool("Find", false);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.tag == "Wall")
-        {
-            rd2d.velocity = new Vector2(0f, 0f);
-            animator.SetBool("Find", false);
-        }
-
         if (collision.transform.tag == "Bullet")
         {
             Bullet bullet = collision.GetComponent<Bullet>();

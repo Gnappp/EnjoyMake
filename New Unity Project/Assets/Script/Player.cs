@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
     {
 
         Shooting();
-        Jump2();
+        Jump();
         Moving();
         Crouching();
     }
@@ -65,25 +65,6 @@ public class Player : MonoBehaviour
             }
         }
     }
-
-    //private void Jump2()
-    //{
-    //    if (Input.GetAxisRaw("Vertical") > 0f && jumpTime <= 0f)
-    //    {
-    //        Jump3(Input.GetAxisRaw("Vertical"));
-    //        jumpTime = jumpingTime;
-    //    }
-    //    else
-    //        jumpTime -= Time.deltaTime;
-    //}
-
-    //private void Jump3(float jumpVelocity)
-    //{
-    //    rb2.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
-
-    //}
-    
-    
 
     private void Moving()
     {
@@ -140,7 +121,6 @@ public class Player : MonoBehaviour
             }
         }
         
-
         if (moveHorizontal==0 && !jump)
         {
             if (animator.GetBool("Player_Move"))
@@ -173,64 +153,38 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Jump2()
+    private void Jump()
     {
         float moveVertical = Input.GetAxis("Vertical");
-        if(moveVertical>0)
+        if(Input.GetKey(KeyCode.UpArrow) && jumpchance)
         {
-            if (Time.time - jumpTime > 0.5 && !jump)
+            if(jump&&!animator.GetBool("Player_Down"))
             {
-                rb2.AddForce(Vector2.up * 1f, ForceMode2D.Impulse);
-                jumpTime = Time.time;
-            }
-            else if(Time.time-jumpTime<0.5 && moveVertical==0)
-            {
-                rb2.AddForce(Vector2.up * 1f, ForceMode2D.Impulse);
+                rb2.velocity= rb2.velocity+new Vector2(0f,(1-moveVertical) * 0.2f);
             }
 
             if (!jump)
             {
                 jumpchance = true;
                 jump = true;
+                rb2.AddForce(Vector2.up * 3f, ForceMode2D.Impulse);
                 animator.SetTrigger("Player_Jump");
             }
         }
-
-        if (rb2.velocity.y < -0.1 && !animator.GetBool("Player_Down"))
+        if(Input.GetKeyUp(KeyCode.UpArrow) || 1-moveVertical==0)
         {
-            animator.SetBool("Player_Down", true);
-            jump = true;
             jumpchance = false;
         }
-    }
-
-    private void Jump()
-    {
-        if (Input.GetKeyDown(KeyCode.UpArrow) && !jump)
+        if(!jump && Input.GetKeyUp(KeyCode.UpArrow))
         {
             jumpchance = true;
-            jump = true;
-            animator.SetTrigger("Player_Jump");
         }
+
         if (rb2.velocity.y < -0.1 && !animator.GetBool("Player_Down"))
         {
             animator.SetBool("Player_Down", true);
             jump = true;
-            jumpchance = false;
         }
-
-        Jumping();
-    }
-    private void Jumping()
-    {
-        if (!jumpchance)
-        {
-            return;
-        }
-        rb2.velocity = Vector2.zero;
-        Vector2 jumpVelo = new Vector2(0, 4f);
-        rb2.AddForce(jumpVelo, ForceMode2D.Impulse);
-        jumpchance = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -238,12 +192,18 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Bottom" && animator.GetBool("Player_Down"))
         {
             jump = false;
+            jumpchance = true;
             animator.SetBool("Player_Down", false);
         }
 
         if(collision.gameObject.tag=="Wall")
         {
             crushWall = true;
+        }
+        
+        if (collision.transform.tag == "Monster")
+        {
+            Debug.Log("Hit");
         }
     }
 
@@ -255,8 +215,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
      
@@ -265,21 +223,5 @@ public class Player : MonoBehaviour
             Debug.Log("Debuff");
         }
 
-        if (collision.transform.tag == "Monster")
-        {
-            Debug.Log("Hit");
-        }
     }
-
-    
-
-    //void OnCollisionEnter2D(Collision2D collision)
-    //{ 
-    //    if (collision.gameObject.tag == "Bottom" && jump &&!animator.GetBool("Player_Down"))
-    //    {
-    //        Collider2D collider = gameObject.GetComponent<Collider2D>();
-    //        Debug.Log("??");
-    //        Physics2D.IgnoreCollision(collision.collider, collider, true);
-    //    }
-    //}
 }
