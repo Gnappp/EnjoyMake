@@ -47,9 +47,9 @@ public class Monster_Eagle : MonoBehaviour
 
             Vector2 pos_ptr=Vector2.zero;
             if (right)
-                pos_ptr = new Vector2(transform.position.x + 0.05f, transform.position.y);
+                pos_ptr = new Vector2(transform.position.x + 0.1f, transform.position.y);
             else if (!right)
-                pos_ptr = new Vector2(transform.position.x - 0.05f, transform.position.y);
+                pos_ptr = new Vector2(transform.position.x - 0.1f, transform.position.y);
 
             bc2d.enabled = false;
             RaycastHit2D hit = Physics2D.Raycast(pos_ptr, Vector2.down, 0.5f);
@@ -158,11 +158,11 @@ public class Monster_Eagle : MonoBehaviour
     {
         attackTime = Time.time;
         attackTurn = false;
-        if (right)
+        if (right && !turning)
         {
             rd2d.velocity = new Vector2(3f, rd2d.velocity.y);
         }
-        else if(!right)
+        else if(!right && !turning)
         {
             rd2d.velocity = new Vector2(-3f, rd2d.velocity.y);
         }
