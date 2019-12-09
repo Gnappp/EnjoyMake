@@ -203,7 +203,8 @@ public class Player : MonoBehaviour
         
         if (collision.transform.tag == "Monster")
         {
-            Debug.Log("Hit");
+            GameManager.Instance.GameOver();
+            bc2.enabled = false;
         }
     }
 

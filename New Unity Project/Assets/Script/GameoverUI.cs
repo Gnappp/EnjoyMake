@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PauseUI : MonoBehaviour
+public class GameoverUI : MonoBehaviour
 {
-    public GameObject pauseui;
+    public GameObject gameoverUI;
     private string sceneName;
 
     // Start is called before the first frame update
@@ -17,31 +17,21 @@ public class PauseUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (GameManager.Instance.Get_gameover() && !gameoverUI.active)
         {
-            if (!pauseui.active)
-            {
-                Time.timeScale = 0f;
-                pauseui.SetActive(true);
-            }
-            else if(pauseui.active)
-            {
-                Resume();
-            }
+            Time.timeScale = 0f;
+            gameoverUI.SetActive(true);
         }
-
+        else if (Input.GetKeyUp(KeyCode.Space) && gameoverUI.active && GameManager.Instance.Get_gameover())
+        {
+            Restart();
+        }
     }
 
     public void Restart()
     {
-        Time.timeScale = 1f;
+        GameManager.Instance.Set_gameover(false);
         SceneManager.LoadSceneAsync(sceneName);
-    }
-
-    public void Resume()
-    {
-        pauseui.SetActive(false);
         Time.timeScale = 1f;
     }
-
 }

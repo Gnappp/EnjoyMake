@@ -183,6 +183,7 @@ public class Monster_Eagle : MonoBehaviour
         {
             rd2d.velocity = new Vector2(0f, 0f);
             bc2d.enabled = false;
+            rd2d.isKinematic = true;
             animator.SetBool("Death",true);
             DestroyObject(this.gameObject, 0.5f);
         }

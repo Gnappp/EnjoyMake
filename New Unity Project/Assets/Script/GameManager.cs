@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
+    private bool gameover;
     private static GameManager instance;
     public static GameManager Instance
     {
@@ -47,17 +47,26 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameover = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
 
     public void GameOver()
     {
-        
+        gameover = true;
+    }
+
+    public bool Get_gameover()
+    {
+        return gameover;
+    }
+    public void Set_gameover(bool set_gameover)
+    {
+        gameover = set_gameover;
     }
 }
