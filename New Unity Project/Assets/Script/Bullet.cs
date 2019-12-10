@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(!(collision.transform.tag=="Player"))
+        if(!(collision.transform.tag=="Player" || collision.transform.tag == "Debuff"))
             DestroyObject(this.gameObject);
     }
     public int Get_Damage()
