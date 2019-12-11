@@ -22,22 +22,22 @@ public class Gas : MonoBehaviour
 
     void RandomDebuff()
     {
-        int ran = Random.Range(0, 2);
+        int ran = Random.Range(0, 100)%3;
         sec = 4f;
-        debuffName = "Paralysis";
-        //switch(ran)
-        //{
-        //    case 0:
-        //        debuffName = "RightLeftReverse";
-        //        break;
-        //    case 1:
-        //        debuffName = "Paralysis";
-        //        break;
-        //    case 2:
-        //        debuffName = "DubbleGravity";
-        //        break;
+        Debug.Log(ran);
+        switch (ran)
+        {
+            case 0:
+                debuffName = "RightLeftReverse";
+                break;
+            case 1:
+                debuffName = "Paralysis";
+                break;
+            case 2:
+                debuffName = "DubbleGravity";
+                break;
 
-        //}
+        }
     }
     public float Get_sec()
     {

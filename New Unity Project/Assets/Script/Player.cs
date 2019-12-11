@@ -24,18 +24,19 @@ public class Player : MonoBehaviour
 
     public GameObject bullet;
 
-    private bool crushWall;
     private bool right;
     private Animator animator;
     private Rigidbody2D rb2;
     private BoxCollider2D bc2;
+    private CapsuleCollider2D cc2d;
     private bool jump;
     private bool jumpchance;
-    private Vector2 Crouch_Collider_Size;
-    private Vector2 Crouch_Collider_Offset;
-    private Vector2 Idel_Collider_Size;
-    private Vector2 Idel_Collider_Offset;
     private HashSet<Debuff> debuffSet;
+    private float speed = 1f;
+    private float jumpPower = 1f;
+    private bool isGround;
+    private float isGroundTime = 0f;
+
 
 
     // Start is called before the first frame update
@@ -44,21 +45,18 @@ public class Player : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
         rb2 = gameObject.GetComponent<Rigidbody2D>();
         bc2 = gameObject.GetComponent<BoxCollider2D>();
+        cc2d = gameObject.GetComponent<CapsuleCollider2D>();
         jump = true;
         jumpchance = false;
         right = true;
-        Idel_Collider_Size = new Vector2(0.1823192f, 0.2176738f);
-        Idel_Collider_Offset = new Vector2(-0.008840397f, -0.05000013f);
-        Crouch_Collider_Size = new Vector2(0.1823192f, 0.1088369f);
-        Crouch_Collider_Offset = new Vector2(-0.008840397f, -0.1000003f);
         debuffSet = new HashSet<Debuff>();
+        Time.timeScale = 0.5f;
     }
 
 
     // Update is called once per frame
     void Update()
     {
-
         Shooting();
         Jump();
         Moving();
@@ -78,15 +76,17 @@ public class Player : MonoBehaviour
                     switch (de.Name)
                     {
                         case "RightLeftReverse":
-                            right = !right;
+                            speed = 1f;
                             break;
                         case "Paralysis":
                             rb2.constraints = RigidbodyConstraints2D.None;
                             rb2.freezeRotation = true;
                             animator.enabled = true;
+                            speed = 1f;
+                            jumpPower = 1f;
                             break;
                         case "DubbleGravity":
-                            rb2.gravityScale = rb2.gravityScale / 2;
+                            rb2.gravityScale = 1f;
                             break;
                     }
                     debuffSet.Remove(de);
@@ -99,8 +99,7 @@ public class Player : MonoBehaviour
                         if ((de.ContiuousTime + de.StartTime - Time.time) < (de2.ContiuousTime + de2.StartTime - Time.time))
                         {
                             debuffSet.Remove(de);
-                        }
-                        else if ((de.ContiuousTime + de.StartTime - Time.time) > (de2.ContiuousTime + de2.StartTime - Time.time))
+                        } else if ((de.ContiuousTime + de.StartTime - Time.time) > (de2.ContiuousTime + de2.StartTime - Time.time))
                         {
                             debuffSet.Remove(de2);
                         }
@@ -120,14 +119,16 @@ public class Player : MonoBehaviour
                 switch(de.Name)
                 {
                     case "RightLeftReverse":
-                        right = !right;
+                        speed = -1f;
                         break;
                     case "Paralysis":
-                        
+                        rb2.constraints = RigidbodyConstraints2D.FreezeAll;
+                        speed = 0f;
+                        jumpPower = 0f;
                         animator.enabled = false;
                         break;
                     case "DubbleGravity":
-                        rb2.gravityScale = rb2.gravityScale * 2;
+                        rb2.gravityScale = 2f;
                         break;
                 }
             }
@@ -154,67 +155,42 @@ public class Player : MonoBehaviour
 
     private void Moving()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        if (Mathf.Abs(moveHorizontal) > 0)
+        float moveHorizontal = Input.GetAxisRaw("Horizontal") * speed;
+        if (Mathf.Abs(moveHorizontal) >= 0)
         {
             if (!animator.GetBool("Player_Move") && !jump)
                 animator.SetBool("Player_Move", true);
 
-            if (!crushWall)
+            if (moveHorizontal < 0)
             {
-                if (moveHorizontal < 0)
+                rb2.velocity = new Vector2(moveHorizontal * 1f, rb2.velocity.y);
+                if (right)
                 {
-                    rb2.velocity = new Vector2(moveHorizontal * 1.5f, rb2.velocity.y);
-                    if (right)
-                    {
-                        transform.rotation = new Quaternion(0, 180, 0, 0);
-                        right = false;
-                    }
+                    transform.rotation = new Quaternion(0, 180, 0, 0);
+                    right = false;
                 }
-                else if (moveHorizontal > 0)
+            } else if (moveHorizontal > 0)
+            {
+                rb2.velocity = new Vector2(moveHorizontal * 1f, rb2.velocity.y);
+                if (!right)
                 {
-                    rb2.velocity = new Vector2(moveHorizontal * 1.5f, rb2.velocity.y);
-                    if (!right)
-                    {
-                        transform.rotation = new Quaternion(0, 0, 0, 0);
-                        right = true;
-                    }
+                    transform.rotation = new Quaternion(0, 0, 0, 0);
+                    right = true;
                 }
+            } else if(moveHorizontal==0)
+            {
+                rb2.velocity = new Vector2(0, rb2.velocity.y);
             }
-            else if (crushWall)
-            {
-                if (moveHorizontal < 0 && right)
-                {
-                    rb2.velocity = new Vector2(moveHorizontal * 1.5f, rb2.velocity.y);
-                    if (right)
-                    {
-                        transform.rotation = new Quaternion(0, 180, 0, 0);
-                        crushWall = false;
-                        right = false;
-                    }
-                }
-                else if (moveHorizontal > 0 && !right)
-                {
-                    rb2.velocity = new Vector2(moveHorizontal * 1.5f, rb2.velocity.y);
-                    if (!right)
-                    {
-                        transform.rotation = new Quaternion(0, 0, 0, 0);
 
-                        crushWall = false;
-                        right = true;
-                    }
+            if (moveHorizontal == 0 && !jump)
+            {
+                if (animator.GetBool("Player_Move"))
+                {
+                    animator.SetBool("Player_Move", false);
                 }
             }
-        }
-        
-        if (moveHorizontal==0 && !jump)
-        {
-            if (animator.GetBool("Player_Move"))
-            {
-                animator.SetBool("Player_Move", false);
-            }
-        }
 
+        }
     }
     private void Crouching()
     {
@@ -223,8 +199,7 @@ public class Player : MonoBehaviour
             if (!animator.GetBool("Player_Crouch"))
             {
                 animator.SetBool("Player_Crouch", true);
-                bc2.size = Crouch_Collider_Size;
-                bc2.offset = Crouch_Collider_Offset;
+                bc2.enabled = false;
             }
 
         }
@@ -233,31 +208,30 @@ public class Player : MonoBehaviour
             if (animator.GetBool("Player_Crouch"))
             {
                 animator.SetBool("Player_Crouch", false);
-                bc2.size = Idel_Collider_Size;
-                bc2.offset = Idel_Collider_Offset;
+                bc2.enabled = true;
             }
         }
     }
 
     private void Jump()
     {
-        float moveVertical = Input.GetAxis("Vertical");
+        float moveVertical = Input.GetAxis("Vertical") * jumpPower;
         if(Input.GetKey(KeyCode.UpArrow) && jumpchance)
         {
             if(jump&&!animator.GetBool("Player_Down"))
             {
-                rb2.velocity= rb2.velocity+new Vector2(0f,(1-moveVertical) * 0.2f);
+                rb2.velocity= rb2.velocity+new Vector2(0f,(1-moveVertical) * 0.2f );
             }
 
-            if (!jump)
+            if (!jump && !animator.GetBool("Player_Down") && isGround)
             {
+                isGround = false;
                 jumpchance = true;
                 jump = true;
-                rb2.AddForce(Vector2.up * 3f, ForceMode2D.Impulse);
-                if (rb2.velocity.y > 0.5)
+                rb2.AddForce(Vector2.up * 3f * jumpPower, ForceMode2D.Impulse);
+                if (rb2.velocity.y > 0.1)
                 {
-                    Debug.Log(rb2.velocity.y);
-                    animator.SetTrigger("Player_Jump");
+                    animator.SetBool("Player_Jump",true);
                 }
             }
         }
@@ -265,53 +239,45 @@ public class Player : MonoBehaviour
         {
             jumpchance = false;
         }
-        if(!jump && Input.GetKeyUp(KeyCode.UpArrow))
-        {
-            jumpchance = true;
-        }
 
-        if (rb2.velocity.y < -0.1 && !animator.GetBool("Player_Down"))
+        if (rb2.velocity.y < -0.1 && !isGround)
         {
-            animator.SetBool("Player_Down", true);
             jump = true;
+            jumpchance = false;
+            animator.SetBool("Player_Jump", false);
+            animator.SetBool("Player_Down", true);
         }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Bottom" && animator.GetBool("Player_Down"))
+        if ((collision.gameObject.tag == "Bottom" || collision.gameObject.tag == "Wall") && animator.GetBool("Player_Down"))
         {
+            Debug.Log("Enter");
             jump = false;
             jumpchance = true;
+            isGround = true;
             animator.SetBool("Player_Down", false);
         }
-
-        if(collision.gameObject.tag=="Wall")
-        {
-            crushWall = true;
-        }
-        
         if (collision.transform.tag == "Monster")
         {
             GameManager.Instance.GameOver();
             bc2.enabled = false;
         }
     }
-    //private void OnCollisionStay2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.tag == "Bottom" && !animator.GetBool("Player_Down"))
-    //    {
-    //        jump = false;
-    //        jumpchance = true;
-    //        animator.SetBool("Player_Down", false);
-    //    }
-    //}
+
+    
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if(collision.gameObject.tag=="Wall")
+        if ((collision.gameObject.tag == "Bottom" || collision.gameObject.tag == "Wall"))
         {
-            crushWall = false;
+            isGround = false;
         }
     }
 
