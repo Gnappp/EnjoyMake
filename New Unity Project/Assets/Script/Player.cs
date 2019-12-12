@@ -32,10 +32,12 @@ public class Player : MonoBehaviour
     private bool jump;
     private bool jumpchance;
     private HashSet<Debuff> debuffSet;
-    private float speed = 1f;
+    private float speed = 50f;
     private float jumpPower = 1f;
     private bool isGround;
-    private float isGroundTime = 0f;
+    private float moveVertical = 0f;
+    private float moveHorizontal = 0f;
+    private bool crouch;
 
 
 
@@ -50,19 +52,46 @@ public class Player : MonoBehaviour
         jumpchance = false;
         right = true;
         debuffSet = new HashSet<Debuff>();
-        Time.timeScale = 0.5f;
+        //Time.timeScale = 0.5f;
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        moveHorizontal = Input.GetAxisRaw("Horizontal");
+        moveVertical = Input.GetAxis("Vertical");
+        if (Input.GetKeyDown(KeyCode.UpArrow) && (moveVertical > 0 && !jump))
+        {
+            jump = true;
+            jumpchance = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.UpArrow) || moveVertical == 1)
+        {
+            jumpchance = false;
+            moveVertical = Input.GetAxisRaw("Vertical");
+        }
+
+        if (Input.GetKey(KeyCode.DownArrow) && !jump)
+        {
+            crouch = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            crouch = false;
+        }
+        Landing();
         Shooting();
+        DebuffTimeCheck();
+        DebuffCheck();
+    }
+
+    void FixedUpdate()
+    {
         Jump();
         Moving();
         Crouching();
-        DebuffTimeCheck();
-        DebuffCheck();
     }
 
     private void DebuffTimeCheck()
@@ -139,23 +168,37 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             GameObject inst = Instantiate(bullet) as GameObject;
-            if (right)
+            if (!crouch)
             {
-                inst.transform.position = new Vector3(bc2.bounds.center.x, bc2.bounds.center.y, 0);
-                inst.GetComponent<Rigidbody2D>().velocity = new Vector2(4f, 0);
+                if (right)
+                {
+                    inst.transform.position = new Vector3(bc2.bounds.center.x, bc2.bounds.center.y, 0);
+                    inst.GetComponent<Rigidbody2D>().velocity = new Vector2(4f, 0);
+                }
+                else if (!right)
+                {
+                    inst.transform.position = new Vector3(bc2.bounds.center.x, bc2.bounds.center.y, 0);
+                    inst.GetComponent<Rigidbody2D>().velocity = new Vector2(-4f, 0);
+                }
             }
-            else if (!right)
+            else if(crouch)
             {
-                inst.transform.position = new Vector3(bc2.bounds.center.x, bc2.bounds.center.y, 0);
-                inst.GetComponent<Rigidbody2D>().velocity = new Vector2(-4f, 0);
+                if (right)
+                {
+                    inst.transform.position = new Vector3(cc2d.bounds.center.x, cc2d.bounds.center.y, 0);
+                    inst.GetComponent<Rigidbody2D>().velocity = new Vector2(4f, 0);
+                }
+                else if (!right)
+                {
+                    inst.transform.position = new Vector3(cc2d.bounds.center.x, cc2d.bounds.center.y, 0);
+                    inst.GetComponent<Rigidbody2D>().velocity = new Vector2(-4f, 0);
+                }
             }
-           
         }
     }
 
     private void Moving()
     {
-        float moveHorizontal = Input.GetAxisRaw("Horizontal") * speed;
         if (Mathf.Abs(moveHorizontal) >= 0)
         {
             if (!animator.GetBool("Player_Move") && !jump)
@@ -163,7 +206,7 @@ public class Player : MonoBehaviour
 
             if (moveHorizontal < 0)
             {
-                rb2.velocity = new Vector2(moveHorizontal * 1f, rb2.velocity.y);
+                rb2.velocity = new Vector2(moveHorizontal * speed * Time.fixedDeltaTime, rb2.velocity.y);
                 if (right)
                 {
                     transform.rotation = new Quaternion(0, 180, 0, 0);
@@ -171,7 +214,7 @@ public class Player : MonoBehaviour
                 }
             } else if (moveHorizontal > 0)
             {
-                rb2.velocity = new Vector2(moveHorizontal * 1f, rb2.velocity.y);
+                rb2.velocity = new Vector2(moveHorizontal * speed * Time.fixedDeltaTime, rb2.velocity.y);
                 if (!right)
                 {
                     transform.rotation = new Quaternion(0, 0, 0, 0);
@@ -194,7 +237,7 @@ public class Player : MonoBehaviour
     }
     private void Crouching()
     {
-        if (Input.GetKey(KeyCode.DownArrow) && !jump)
+        if (crouch)
         {
             if (!animator.GetBool("Player_Crouch"))
             {
@@ -203,7 +246,7 @@ public class Player : MonoBehaviour
             }
 
         }
-        else if (Input.GetKeyUp(KeyCode.DownArrow))
+        else if (!crouch)
         {
             if (animator.GetBool("Player_Crouch"))
             {
@@ -213,39 +256,36 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Jump()
+    private void Landing()
     {
-        float moveVertical = Input.GetAxis("Vertical") * jumpPower;
-        if(Input.GetKey(KeyCode.UpArrow) && jumpchance)
-        {
-            if(jump&&!animator.GetBool("Player_Down"))
-            {
-                rb2.velocity= rb2.velocity+new Vector2(0f,(1-moveVertical) * 0.2f );
-            }
-
-            if (!jump && !animator.GetBool("Player_Down") && isGround)
-            {
-                isGround = false;
-                jumpchance = true;
-                jump = true;
-                rb2.AddForce(Vector2.up * 3f * jumpPower, ForceMode2D.Impulse);
-                if (rb2.velocity.y > 0.1)
-                {
-                    animator.SetBool("Player_Jump",true);
-                }
-            }
-        }
-        if(Input.GetKeyUp(KeyCode.UpArrow) || 1-moveVertical==0)
-        {
-            jumpchance = false;
-        }
-
         if (rb2.velocity.y < -0.1 && !isGround)
         {
             jump = true;
             jumpchance = false;
-            animator.SetBool("Player_Jump", false);
-            animator.SetBool("Player_Down", true);
+            if (!animator.GetBool("Player_Down"))
+            {
+                animator.SetBool("Player_Jump", false);
+                animator.SetBool("Player_Down", true);
+            }
+        }
+    }
+
+    private void Jump()
+    {
+        if(jump && jumpchance)
+        {
+            if (jump && !animator.GetBool("Player_Jump"))
+            {
+                Debug.Log("Jump");
+                jumpchance = true;
+                jump = true;
+                animator.SetBool("Player_Jump", true);
+                rb2.AddForce(Vector2.up * 3f , ForceMode2D.Impulse);
+            }
+            if (jumpchance)
+            {
+                rb2.velocity = rb2.velocity + new Vector2(0f, (2f - moveVertical)*3f  *jumpPower * Time.fixedDeltaTime);
+            }
         }
     }
 
@@ -256,11 +296,12 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if ((collision.gameObject.tag == "Bottom" || collision.gameObject.tag == "Wall") && animator.GetBool("Player_Down"))
-        {
+
+        if(collision.gameObject == cc2d.IsTouching(collision.collider))
+        {   
             Debug.Log("Enter");
             jump = false;
-            jumpchance = true;
+            jumpchance = false;
             isGround = true;
             animator.SetBool("Player_Down", false);
         }
@@ -275,7 +316,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if ((collision.gameObject.tag == "Bottom" || collision.gameObject.tag == "Wall"))
+        if ((collision.gameObject.tag == "Bottom" || collision.gameObject.tag == "Wall" || collision.gameObject.tag=="Hill"))
         {
             isGround = false;
         }
