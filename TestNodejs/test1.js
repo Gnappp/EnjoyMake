@@ -21,7 +21,7 @@ function SetRank()
 }
 function GetRank(res)
 {
-    connect.query('select * from RANKING;',(error,rows,field)=>
+    connect.query('select * from RANKING order by time,name asc;',(error,rows,field)=>
     {
         if(error)
         {
