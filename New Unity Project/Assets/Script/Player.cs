@@ -52,7 +52,6 @@ public class Player : MonoBehaviour
         jumpchance = false;
         right = true;
         debuffSet = new HashSet<Debuff>();
-        //Time.timeScale = 0.5f;
     }
 
 

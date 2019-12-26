@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class TestServer : MonoBehaviour
 {
     public Canvas rankCanvas;
     public Canvas btnCanvas;
     public Sprite texture;
-
+    public Scene gameScene;
     private RankResult data;
     private List<Button> button = new List<Button>();
     private Text btnCanvas_Text;
@@ -60,6 +61,23 @@ public class TestServer : MonoBehaviour
     {
         ButtonFocus();
         InputRankText();
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            if (rankCanvas.gameObject.active)
+                ExitRanking();
+        }
+    }
+
+    void FixedUpdate()
+    {
+        
+    }
+
+   
+    public void ExitRanking()
+    {
+        rankCanvas.gameObject.SetActive(false);
+        btnCanvas.gameObject.SetActive(true);
     }
 
     void InputRankText()
@@ -72,26 +90,35 @@ public class TestServer : MonoBehaviour
                 if (rankCanvas.gameObject.transform.GetChild(i).name == "RankTextPanel")
                     panelNo = i;
             }
-            for(int i=0;i<data.rank.Count;i++)
+            for (int i = 0; i < data.rank.Count; i++)
             {
-                if(i==0)
+                if (i == 0)
                     rankCanvas.gameObject.transform.GetChild(0).GetComponent<Text>().text = (i + 1) + ". " + data.rank[i].name.ToString() + "   " + data.rank[i].time.ToString();
-                else if(i==1)
+                else if (i == 1)
                     rankCanvas.gameObject.transform.GetChild(1).GetComponent<Text>().text = (i + 1) + ". " + data.rank[i].name.ToString() + "   " + data.rank[i].time.ToString();
-                else if(i>=2 && i<6)
+                else if (i >= 2 && i < 6)
                     rankCanvas.gameObject.transform.GetChild(panelNo).GetChild(0).GetComponent<Text>().text += (i + 1) + ". " + data.rank[i].name.ToString() + "   " + data.rank[i].time.ToString() + "\n\n";
-                else if(i>=6 && i<10)
+                else if (i >= 6 && i < 10)
                     rankCanvas.gameObject.transform.GetChild(panelNo).GetChild(1).GetComponent<Text>().text += (i + 1) + ". " + data.rank[i].name.ToString() + "   " + data.rank[i].time.ToString() + "\n\n";
             }
             data = null;
         }
     }
 
-    void RankView()
+
+    public void RankView()
     {
+        button[focusBtn].image.sprite = normalSprite;
+        focusBtn = 2;
+        button[focusBtn].image.sprite = texture;
         StartCoroutine(PostNetworkingWithWebRequest());
         btnCanvas.gameObject.SetActive(false);
         rankCanvas.gameObject.SetActive(true);
+    }
+
+    public void GameStart()
+    {
+        SceneManager.LoadSceneAsync("Game1");
     }
     
     void ButtonFocus()
@@ -132,6 +159,9 @@ public class TestServer : MonoBehaviour
             {
                 case "Ranking":
                     RankView();
+                    break;
+                case "GameStart":
+                    GameStart();
                     break;
 
             }
