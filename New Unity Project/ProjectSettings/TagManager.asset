@@ -9,6 +9,7 @@ TagManager:
   - Monster
   - Bullet
   - Debuff
+  - Gam
   layers:
   - Default
   - TransparentFX

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class GameoverUI : MonoBehaviour
 {
     public GameObject gameoverUI;
+
+    private string gameoverTime;
     private string sceneName;
 
     // Start is called before the first frame update
@@ -26,6 +29,20 @@ public class GameoverUI : MonoBehaviour
         {
             Restart();
         }
+        else if(Input.GetKeyUp(KeyCode.Escape) && gameoverUI.active && GameManager.Instance.Get_gameover())
+        {
+            GoMenu();
+        }
+        
+    }
+
+    
+
+    public void GoMenu()
+    {
+        SceneManager.LoadSceneAsync("Start");
+        GameManager.Instance.Set_gameover(false);
+        Time.timeScale = 1f;
     }
 
     public void Restart()
@@ -34,4 +51,5 @@ public class GameoverUI : MonoBehaviour
         SceneManager.LoadSceneAsync(sceneName);
         Time.timeScale = 1f;
     }
+    
 }

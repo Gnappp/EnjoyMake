@@ -306,7 +306,7 @@ public class Player : MonoBehaviour
         }
         if (collision.transform.tag == "Monster")
         {
-            GameManager.Instance.GameOver();
+            GameManager.Instance.Set_gameover(true);
             bc2.enabled = false;
         }
     }
