@@ -21,8 +21,11 @@ public class Gam : MonoBehaviour
     }
 
     public Text timeText;
+    public InputField inputName;
+    public Canvas insertUI;
 
     private string clearTime;
+    private string userName;
     private RankResult data;
    
     // Start is called before the first frame update
@@ -37,12 +40,18 @@ public class Gam : MonoBehaviour
         
     }
 
+    public void InsertName()
+    {
+        //userName = inputName.text;
+        StartCoroutine(GetRank());
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
-            StartCoroutine(RankingRequest());
             clearTime = timeText.text;
+            StartCoroutine(GetRank());
         }
     }
 
@@ -51,10 +60,35 @@ public class Gam : MonoBehaviour
         if (data.rank[data.rank.Count - 1].time > float.Parse(clearTime)) //꼴등이 삭제되어야하기때문에 꼴등보다 크면 랭킹진입
         {
             Debug.Log("ranker!");
+            insertUI.gameObject.SetActive(true);
         }
     }
 
-    IEnumerator RankingRequest()
+    IEnumerator SetRank()
+    {
+        Time.timeScale = 0f;
+        WWWForm form = new WWWForm();
+        Rank rank = new Rank();
+        RankResult rankResult = new RankResult();
+        form.AddField("name", "sss");
+        form.AddField("time", clearTime.ToString());
+        WWW www = new WWW("http://127.0.0.1:3000/SetRank", form);
+        yield return www;
+        string result = www.text;
+        Debug.Log(result);
+
+
+        //string json = JsonUtility.ToJson(rank);
+        //byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
+        //UnityWebRequest webRequest = UnityWebRequest.Post("http://127.0.0.1:3000/SetRank", form);
+        ////webRequest.SetRequestHeader("Content-Type", "application/json");
+
+        //yield return webRequest.SendWebRequest();
+        //string result = webRequest.downloadHandler.text;
+        //Debug.Log(webRequest.error);
+    }
+
+    IEnumerator GetRank()
     {
         Time.timeScale = 0f;
         WWWForm form = new WWWForm();
