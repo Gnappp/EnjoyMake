@@ -275,7 +275,7 @@ public class Player : MonoBehaviour
         {
             if (jump && !animator.GetBool("Player_Jump"))
             {
-                Debug.Log("Jump");
+
                 jumpchance = true;
                 jump = true;
                 animator.SetBool("Player_Jump", true);
@@ -298,7 +298,7 @@ public class Player : MonoBehaviour
 
         if(collision.gameObject == cc2d.IsTouching(collision.collider))
         {   
-            Debug.Log("Enter");
+
             jump = false;
             jumpchance = false;
             isGround = true;

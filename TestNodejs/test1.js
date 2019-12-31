@@ -13,26 +13,48 @@ let connect=mysql.createConnection({
         database:'test_nodejs',
     });
 
-function SetRank(values)
+function SetRank(req,res)
 {
-    connect.query('insert into RANKING(name,time) values (?) ',[values],
+    console.log(req.body);
+    var values=[JSON.parse(JSON.stringify(req.body.name)),JSON.parse(JSON.stringify(req.body.time))];
+    connect.query('insert into RANKING(name,time) values (?);',[values],
     (error)=>
     {
         if(error)
+        {
             console.log('error: '+error);
+            res.send('error');
+        }
+        else
+        { 
+            res.send("success");
+        }
+    }
+    );
+    connect.query('DELETE FROM RANKING WHERE time IN (SELECT * FROM (SELECT MAX(time) FROM RANKING) AS t) AND (SELECT * FROM (SELECT COUNT(name) FROM RANKING) AS n) >15;',
+    (error)=>
+    {
+        if(error)
+        {
+            console.log('error: '+error);
+        }
     }
     );
 }
-function GetRank(res)
+
+function GetRank(req,res)
 {
     connect.query('select * from RANKING order by time,name asc;',(error,rows,field)=>
     {
         if(error)
         {
             console.log("에러 발생: "+error);
-            return;
+            //res.send('error');
         }
-        res.json(rows);
+        else 
+        {
+             res.json(rows);
+        }
     });
     
 }
@@ -40,15 +62,12 @@ function GetRank(res)
 
 var server=http.createServer(app);
 app.post('/SetRank',function (req,res){
-    var values=[JSON.parse(JSON.stringify(req.body.name)),JSON.parse(JSON.stringify(req.body.time))];
-    console.log(values[1]);
-    SetRank(values);
+    SetRank(req,res);
     console.log("Come");
-    res.send('완료');
 });
 
 app.post('/GetRank',function(req,res){
-    GetRank(res);
+    GetRank(req,res);
 })
 
 
