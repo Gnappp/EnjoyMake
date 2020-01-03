@@ -20,16 +20,34 @@ public class Gam : MonoBehaviour
         public string name;
         public float time;
     }
+    [Serializable]
+    public class ErrorResult
+    {
+        public List<Error> error;
+    }
+
+    [Serializable]
+    public class Error
+    {
+        public string code;
+        public int errno;
+        public string sqlMessage;
+        public string sqlState;
+        public int index;
+        public string sql;
+    }
 
     public Text timeText;
     public InputField inputName;
     public Canvas insertUI;
     public Canvas gameoverUI;
     public Text gameoveText;
+    public Text errorText;
 
     private string clearTime;
     private string userName;
     private RankResult data;
+    private ErrorResult errorResult;
     private bool clear=false;
    
     // Start is called before the first frame update
@@ -53,9 +71,7 @@ public class Gam : MonoBehaviour
 
     public void InsertName()
     {
-        Debug.Log("SpawnScript and object is active " + gameObject.activeInHierarchy);
         StartCoroutine(SetRank());
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -91,7 +107,6 @@ public class Gam : MonoBehaviour
         {
             Debug.Log("ranker!");
             insertUI.gameObject.SetActive(true);
-            Debug.Log(inputName.text);
         }
     }
 
@@ -108,9 +123,26 @@ public class Gam : MonoBehaviour
         yield return www;
         string result = www.text;
         Debug.Log(result);
-        if (result!="error")
+        if (result== "\"success\"")
         {
             insertUI.gameObject.SetActive(false);
+        }
+        else if(result!="success")
+        {
+            result = "{\"error\":[" + result + "]}";
+            errorResult = JsonUtility.FromJson<ErrorResult>(result);
+            Debug.Log(errorResult.error.Count);
+            switch(errorResult.error[0].errno)
+            {
+                case 1062: //중복된 name이 있을경우
+                    inputName.text = " ";
+                    errorText.text = "Duplicate name";
+                    break;
+                case 1406: //이름이 길때
+                    inputName.text = " ";
+                    errorText.text = "name is long";
+                    break;
+            }
         }
 
 
@@ -131,7 +163,6 @@ public class Gam : MonoBehaviour
         UnityWebRequest webRequest = UnityWebRequest.Post("http://127.0.0.1:3000/GetRank", form);
 
         yield return webRequest.SendWebRequest();
-        Debug.Log("SpawnScript and object is active " + gameObject.activeInHierarchy);
         string result = webRequest.downloadHandler.text;
         Debug.Log(result);
         result = "{\"rank\":" + result + "}";

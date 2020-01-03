@@ -23,11 +23,11 @@ function SetRank(req,res)
         if(error)
         {
             console.log('error: '+error);
-            res.send('error');
+            res.send(error);
         }
         else
         { 
-            res.send("success");
+            res.json("success");
         }
     }
     );
@@ -44,7 +44,7 @@ function SetRank(req,res)
 
 function GetRank(req,res)
 {
-    connect.query('select * from RANKING order by time,name asc;',(error,rows,field)=>
+    connect.query('select * from RANKING order by time*1,name asc;',(error,rows,field)=>
     {
         if(error)
         {
@@ -81,9 +81,3 @@ app.get('/Hellow',function(req,res){
 server.listen(port,function(){
      console.log('Server running at http://127.0.0.1:3000/');
 })
-
-// var server = http.createServer((request,respone)=>{
-//     respone.writeHead(200);
-//     respone.end("Hellow World");
-// }).listen(port);
-// console.log('Server running at http://127.0.0.1:3000/');
