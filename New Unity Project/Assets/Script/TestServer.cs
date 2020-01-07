@@ -188,15 +188,21 @@ public class TestServer : MonoBehaviour
 
         Time.timeScale = 0f;
         WWWForm form = new WWWForm();
-        //form.AddField("name", "kawk");
-        //form.AddField("score", "1123");
         UnityWebRequest webRequest = UnityWebRequest.Post("http://127.0.0.1:3000/GetRank", form);
 
         yield return webRequest.SendWebRequest();
-        string result = webRequest.downloadHandler.text;
-        Debug.Log(result);
-        result= "{\"rank\":" + result + "}";
-        data = JsonUtility.FromJson<RankResult>(result);
-        Debug.Log(data.rank[0].name + "  " + data.rank[0].time); 
+        if (webRequest.isNetworkError || webRequest.isHttpError)
+        {
+            Debug.Log("Error");
+        }
+        else
+        {
+            string result = webRequest.downloadHandler.text;
+            Debug.Log(result);
+            result = "{\"rank\":" + result + "}";
+            data = JsonUtility.FromJson<RankResult>(result);
+            Debug.Log(data.rank[0].name + "  " + data.rank[0].time);
+            Time.timeScale = 1f;
+        }
     }
 }
