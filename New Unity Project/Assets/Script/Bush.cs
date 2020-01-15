@@ -28,8 +28,6 @@ public class Bush : MonoBehaviour
         if (collision.transform.tag == "Monster")
         {
             Vector3Int cellPos = tileMap.WorldToCell(collision.transform.position);
-            Debug.Log(tileMap.GetTile(cellPos));
-            Debug.Log(cellPos);
             if (monsterPos == Vector3Int.zero && tileMap.GetTile(cellPos) != null)
             {
                 monsterPos = cellPos;
@@ -42,8 +40,6 @@ public class Bush : MonoBehaviour
                     Vector3Int ptr_cellPos1 = cellPos;
                     ptr_cellPos.x -= 1;
                     ptr_cellPos1.x += 1;
-                    Debug.Log(ptr_cellPos);
-                    Debug.Log(tileMap.GetTile(ptr_cellPos1));
 
                     if (tileMap.GetTile(ptr_cellPos) != null)
                     {
@@ -79,8 +75,6 @@ public class Bush : MonoBehaviour
         if(collision.transform.tag == "Player")
         {
             Vector3Int cellPos = tileMap.WorldToCell(collision.transform.position);
-            Debug.Log(tileMap.GetTile(cellPos));
-            Debug.Log(cellPos);
             if (playerPos == Vector3Int.zero && tileMap.GetTile(cellPos) != null)
             {
                 playerPos = cellPos;
@@ -93,8 +87,6 @@ public class Bush : MonoBehaviour
                     Vector3Int ptr_cellPos1 = cellPos;
                     ptr_cellPos.x -= 1;
                     ptr_cellPos1.x += 1;
-                    Debug.Log(ptr_cellPos);
-                    Debug.Log(tileMap.GetTile(ptr_cellPos1));
 
                     if (tileMap.GetTile(ptr_cellPos) != null)
                     {
@@ -133,6 +125,9 @@ public class Bush : MonoBehaviour
     {
         if (collision.transform.tag == "Monster")
         {
+            tileMap.SetTileFlags(monsterPos, TileFlags.None);
+            tileMap.SetColor(monsterPos, new Color(255f, 255f, 255f, 1f));
+            monsterPos = Vector3Int.zero;
         }
         if(collision.transform.tag == "Player")
         {

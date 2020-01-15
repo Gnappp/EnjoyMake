@@ -75,10 +75,12 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.DownArrow) && !jump)
         {
             crouch = true;
+            rb2.mass = 100;
         }
         else if (Input.GetKeyUp(KeyCode.DownArrow))
         {
             crouch = false;
+            rb2.mass = 1;
         }
         Landing();
         Shooting();
