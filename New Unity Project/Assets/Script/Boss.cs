@@ -59,6 +59,5 @@ public class Boss : MonoBehaviour
     {
         GameObject inst = Instantiate(seed) as GameObject;
         inst.transform.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
-        //inst.transform.position = transform.position;
     }
 }

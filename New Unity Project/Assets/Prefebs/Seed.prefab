@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 3337818416094314125}
   - component: {fileID: 3337818416094314124}
   - component: {fileID: 3337818416094314131}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Seed
-  m_TagString: Monster
+  m_TagString: Trap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49,6 +49,10 @@ MonoBehaviour:
   start_end:
   - {fileID: 5934465388932327487, guid: caa3b0ec203782f45946088839b4b018, type: 3}
   - {fileID: 5390482783672732808, guid: f830e7acf0a2ae94e9b4586a30882ffe, type: 3}
+  cloneBoss: {fileID: 8596028915133138815, guid: 1a11a60dc4d5a18459e9a5db4cde8c6a,
+    type: 3}
+  creationTime: 5
+  createDelay: 3
 --- !u!61 &3337818416094314125
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -59,7 +63,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.013088703, y: -0.013082743}

@@ -23,7 +23,7 @@ public class Gas : MonoBehaviour
     void RandomDebuff()
     {
         int ran = Random.Range(0, 100)%3;
-        sec = 4f;
+        sec = 3f;
         Debug.Log(ran);
         switch (ran)
         {
@@ -46,5 +46,14 @@ public class Gas : MonoBehaviour
     public string Get_debuffName()
     {
         return debuffName;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.layer==8) //Layer No.8 is Player
+        {
+            collision.gameObject.GetComponent<Player>().debuffSet_Set(debuffName, sec);
+            DestroyObject(this.gameObject,1f);
+        }
     }
 }

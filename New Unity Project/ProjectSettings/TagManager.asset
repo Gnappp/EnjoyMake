@@ -12,6 +12,7 @@ TagManager:
   - Gam
   - Bush
   - Boss_Plant
+  - Trap
   layers:
   - Default
   - TransparentFX
@@ -23,12 +24,12 @@ TagManager:
   - 
   - Player
   - Bottom
-  - Wall
+  - DestructiveObject
   - Monster
   - Bullet
-  - Boss_Plant
+  - PassBottomMonster
   - Bush
-  - 
+  - DontDestoryObject
   - 
   - 
   - 

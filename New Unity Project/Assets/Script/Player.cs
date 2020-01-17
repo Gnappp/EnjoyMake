@@ -300,13 +300,12 @@ public class Player : MonoBehaviour
 
         if(collision.gameObject == cc2d.IsTouching(collision.collider))
         {   
-
             jump = false;
             jumpchance = false;
             isGround = true;
             animator.SetBool("Player_Down", false);
         }
-        if (collision.transform.tag == "Monster")
+        if (collision.gameObject.layer == 11 || collision.gameObject.layer==13) //Layer No.11 is Monster, No.13 PassBottomMonster
         {
             GameManager.Instance.Set_gameover(true);
             bc2.enabled = false;
@@ -317,20 +316,25 @@ public class Player : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if ((collision.gameObject.tag == "Bottom" || collision.gameObject.tag == "Wall" || collision.gameObject.tag=="Hill"))
+        if (collision.gameObject.layer==9) //Layer No.9 is Bottom
         {
             isGround = false;
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.transform.tag == "Debuff")
+    //    {
+    //        Gas debuf = collision.gameObject.GetComponent<Gas>();
+    //        Debuff debuff = new Debuff(debuf.Get_debuffName(), debuf.Get_sec());
+    //        debuffSet.Add(debuff);
+    //    }
+    //}
+
+    public void debuffSet_Set(string debuffName, float sec)
     {
-        if (collision.transform.tag == "Debuff")
-        {
-            Gas debuf = collision.gameObject.GetComponent<Gas>();
-            Debuff debuff = new Debuff(debuf.Get_debuffName(), debuf.Get_sec());
-            debuffSet.Add(debuff);
-            Debug.Log(debuf.Get_debuffName());
-        }
+        Debuff debuff = new Debuff(debuffName, sec);
+        debuffSet.Add(debuff);
     }
 }

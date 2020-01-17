@@ -16,13 +16,15 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(!(collision.transform.tag=="Player" || collision.transform.tag == "Debuff"))
+        if (!(collision.gameObject.layer == 8 || collision.gameObject.layer == 13 || collision.gameObject.tag=="Bush")) //Layer No.8 is Player, No.13 DontDestoryObject
+        {
             DestroyObject(this.gameObject);
+        }
     }
     public int Get_Damage()
     {
