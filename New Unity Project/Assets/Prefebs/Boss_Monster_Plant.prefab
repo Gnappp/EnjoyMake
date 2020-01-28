@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8596028915133138808}
   m_Layer: 13
   m_Name: Boss_Monster_Plant
-  m_TagString: Boss_Plant
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

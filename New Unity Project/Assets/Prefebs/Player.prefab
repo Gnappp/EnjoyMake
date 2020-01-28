@@ -137,7 +137,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 7c800a5195cfea648bed85f78d282fb2, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_UsedByComposite: 1
   m_Offset: {x: -0.0067840815, y: -0.019013822}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
