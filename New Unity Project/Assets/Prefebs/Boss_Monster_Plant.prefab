@@ -164,3 +164,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jump_delay: 4
   seed: {fileID: 3337818416094314130, guid: 70a51e4a6cd5411499ec07cf6e5d32db, type: 3}
+  solar: {fileID: 0}

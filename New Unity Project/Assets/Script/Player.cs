@@ -60,16 +60,14 @@ public class Player : MonoBehaviour
     {
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         moveVertical = Input.GetAxis("Vertical");
-        if (Input.GetKeyDown(KeyCode.UpArrow) && (moveVertical > 0 && !jump))
+        if (Input.GetKeyDown(KeyCode.UpArrow) && (moveVertical != 0 && !jump))
         {
             jump = true;
             jumpchance = true;
         }
-
         if (Input.GetKeyUp(KeyCode.UpArrow) || moveVertical == 1)
         {
             jumpchance = false;
-            moveVertical = Input.GetAxisRaw("Vertical");
         }
 
         if (Input.GetKey(KeyCode.DownArrow) && !jump)
@@ -175,6 +173,10 @@ public class Player : MonoBehaviour
                 {
                     inst.transform.position = new Vector3(bc2.bounds.center.x, bc2.bounds.center.y, 0);
                     inst.GetComponent<Rigidbody2D>().velocity = new Vector2(4f, 0);
+                    //Vector2 pos;
+                    //pos = new Vector3(3.1f, 1.9f) - transform.position;
+                    //float angle = Mathf.Atan2(pos.y, pos.x) * Mathf.Rad2Deg;
+                    //inst.GetComponent<Rigidbody2D>().velocity = pos.normalized * 4f;
                 }
                 else if (!right)
                 {
@@ -285,7 +287,7 @@ public class Player : MonoBehaviour
             }
             if (jumpchance)
             {
-                rb2.velocity = rb2.velocity + new Vector2(0f, (2f - moveVertical)*3f  *jumpPower * Time.fixedDeltaTime);
+                rb2.velocity = rb2.velocity + new Vector2(0f, 6f  *jumpPower * Time.deltaTime);
             }
         }
     }
@@ -307,8 +309,7 @@ public class Player : MonoBehaviour
         }
         if (collision.gameObject.layer == 11 || collision.gameObject.layer==13) //Layer No.11 is Monster, No.13 PassBottomMonster
         {
-            GameManager.Instance.Set_gameover(true);
-            bc2.enabled = false;
+            GameOver();
         }
     }
 
@@ -336,5 +337,11 @@ public class Player : MonoBehaviour
     {
         Debuff debuff = new Debuff(debuffName, sec);
         debuffSet.Add(debuff);
+    }
+
+    public void GameOver()
+    {
+        GameManager.Instance.Set_gameover(true);
+        bc2.enabled = false;
     }
 }

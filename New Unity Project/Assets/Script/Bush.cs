@@ -113,7 +113,6 @@ public class Bush : MonoBehaviour
                     tileMap.SetTileFlags(cellPos, TileFlags.None);
                     tileMap.SetColor(cellPos, Color.green);
                     hidebush.objectPos = cellPos;
-                    Debug.Log("gg");
                 }
                 else if (Mathf.Abs(hidebush.objectPos.x - cellPos.x) > 1 && tileMap.GetTile(cellPos) != null)
                 {

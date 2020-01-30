@@ -7,13 +7,13 @@ public class Boss : MonoBehaviour
     public float jump_delay = 4f;
     public GameObject seed;
     public GameObject solar;
+    public GameObject gam;
 
     private int hp = 50;
     private GameObject player;
     private bool jumping = true;
     private float jump_time = 0f;
     private float createseedTime = 0f;
-    private float freezeTime = 0f;
     private Rigidbody2D rb2d;
     private bool solarPhase = false;
 
@@ -22,7 +22,7 @@ public class Boss : MonoBehaviour
     {
         player = GameObject.Find("Player");
         rb2d = gameObject.GetComponent<Rigidbody2D>();
-        if (gameObject.name != "Boss_Monster_Plant(Clone)")
+        if (gameObject.name == "Boss_Monster_Plant(Clone)")
             hp = 25;
     }
 
@@ -32,6 +32,13 @@ public class Boss : MonoBehaviour
         Jump();
         CreateSeed();
         Phase2();
+        if(hp<=0)
+        {
+            DestroyObject(this.gameObject);
+            DestroyObject(solar.gameObject);
+            DestroyObject(seed.gameObject);
+            gam.SetActive(true);
+        }
     }
 
     void Jump()
@@ -65,7 +72,7 @@ public class Boss : MonoBehaviour
 
     void CreateSeed()
     {
-        if (createseedTime > 5 && gameObject.name != "Boss_Monster_Plant(Clone)")
+        if (createseedTime > 7 && gameObject.name != "Boss_Monster_Plant(Clone)")
         {
             GameObject inst = Instantiate(seed) as GameObject;
             inst.transform.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
@@ -78,23 +85,19 @@ public class Boss : MonoBehaviour
     {
         if (hp < 25 && gameObject.name != "Boss_Monster_Plant(Clone)" && !solarPhase)
         {
-            if (jumping && rb2d.velocity.y < -0.1f)
-            {
-                rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
-                //GameObject inst = Instantiate(solar) as GameObject;
-                //inst.transform.position = gameObject.transform.position;
-                solarPhase = true;
-            }
-        }
-        if (rb2d.constraints == RigidbodyConstraints2D.FreezeAll)
-        {
-            if (freezeTime > 2f)
-            {
-                rb2d.constraints = RigidbodyConstraints2D.None;
-                rb2d.freezeRotation = true;
-            }
-            else
-                freezeTime += Time.deltaTime;
+            solar.SetActive(true);
+            solarPhase = true;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.tag == "Bullet")
+        {
+            Bullet bullet = collision.GetComponent<Bullet>();
+            hp -= bullet.Get_Damage();
+            Debug.Log(hp);
+        }
+    }
+
 }

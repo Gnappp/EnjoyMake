@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public float playTime = 0f;
+
     private bool gameover;
     private static GameManager instance;
     public static GameManager Instance
