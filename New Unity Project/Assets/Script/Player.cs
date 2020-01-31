@@ -80,10 +80,6 @@ public class Player : MonoBehaviour
             crouch = false;
             rb2.mass = 1;
         }
-        Landing();
-        Shooting();
-        DebuffTimeCheck();
-        DebuffCheck();
     }
 
     void FixedUpdate()
@@ -91,6 +87,10 @@ public class Player : MonoBehaviour
         Jump();
         Moving();
         Crouching();
+        Landing();
+        Shooting();
+        DebuffTimeCheck();
+        DebuffCheck();
     }
 
     private void DebuffTimeCheck()

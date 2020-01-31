@@ -37,7 +37,8 @@ public class Boss : MonoBehaviour
             DestroyObject(this.gameObject);
             DestroyObject(GameObject.Find("Solar(Clone)").gameObject);
             DestroyObject(GameObject.Find("SolarBomb(Clone)").gameObject);
-            DestroyObject(GameObject.Find("Sead(Clone)").gameObject);
+            if (GameObject.Find("Sead(Clone)"))
+                DestroyObject(GameObject.Find("Sead(Clone)").gameObject);
             GameObject init = Instantiate(gam) as GameObject;
             init.transform.position = new Vector3(1.88f, 2.064f, 0f);
         }

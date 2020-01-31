@@ -47,6 +47,7 @@ public class Gam : MonoBehaviour
     private RankResult data;
     private ErrorResult errorResult;
     private bool clear=false;
+    private bool ranker = false;
    
     // Start is called before the first frame update
     void Start()
@@ -56,11 +57,11 @@ public class Gam : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space) && clear)
+        if (Input.GetKeyUp(KeyCode.Space) && clear && !ranker)
         {
             Restart();
         }
-        else if (Input.GetKeyUp(KeyCode.Escape) && clear)
+        else if (Input.GetKeyUp(KeyCode.Escape) && clear && !ranker)
         {
             GoMenu();
         }
@@ -87,6 +88,7 @@ public class Gam : MonoBehaviour
     {
         SceneManager.LoadSceneAsync("Start");
         clear = false;
+        GameManager.Instance.playTime = 0f;
         Time.timeScale = 1f;
     }
 
@@ -94,6 +96,7 @@ public class Gam : MonoBehaviour
     {
         GameManager.Instance.Set_gameover(false);
         SceneManager.LoadSceneAsync("Game1");
+        GameManager.Instance.playTime = 0f;
         Time.timeScale = 1f;
     }
 
@@ -103,6 +106,7 @@ public class Gam : MonoBehaviour
         {
             Debug.Log("ranker!");
             Canvas inst = Instantiate(insertUI) as Canvas;
+            ranker = true;
             inputName = inst.transform.GetChild(0).transform.GetChild(3).GetComponent<InputField>();
             errorText = inst.transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
         }
@@ -165,6 +169,7 @@ public class Gam : MonoBehaviour
         Debug.Log(result);
         result = "{\"rank\":" + result + "}";
         data = JsonUtility.FromJson<RankResult>(result);
+        Debug.Log(data != null);
         CompareRanking();
     }
 }
