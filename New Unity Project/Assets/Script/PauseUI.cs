@@ -42,12 +42,16 @@ public class PauseUI : MonoBehaviour
         button[focusBtn].image.sprite = texture;
         curtain = GameObject.Find("Curtain(Clone)");
         childImg = curtain.transform.GetChild(0).GetComponent<Image>();
-        Debug.Log(GameObject.Find("Curtain(Clone)"));
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (curtain == null)
+        {
+            curtain = GameObject.Find("Curtain(Clone)");
+            childImg = curtain.transform.GetChild(0).GetComponent<Image>();
+        }
         if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale!=0f)
         {
             if (!pauseui.active)
@@ -69,9 +73,9 @@ public class PauseUI : MonoBehaviour
         {
             SceneManager.LoadScene(sceneName);
             GameManager.Instance.canvasAlpha = childImg.canvasRenderer.GetAlpha();
+            GameManager.Instance.playTime = 0f;
             loadScene = false;
         }
-        Debug.Log(GameObject.Find("Curtain(Clone)"));
 
     }
 

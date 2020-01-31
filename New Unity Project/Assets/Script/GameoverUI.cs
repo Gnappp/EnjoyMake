@@ -18,7 +18,6 @@ public class GameoverUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(GameObject.Find("Curtain(Clone)"));
         curtain = GameObject.Find("Curtain(Clone)");
         childImg = curtain.transform.GetChild(0).GetComponent<Image>();
     }
@@ -26,6 +25,11 @@ public class GameoverUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if( curtain == null)
+        {
+            curtain = GameObject.Find("Curtain(Clone)");
+            childImg = curtain.transform.GetChild(0).GetComponent<Image>();
+        }
         if (GameManager.Instance.Get_gameover() && !gameoverUI.active)
         {
             Time.timeScale = 0f;
@@ -46,10 +50,9 @@ public class GameoverUI : MonoBehaviour
             SceneManager.LoadScene(sceneName);
             GameManager.Instance.Set_gameover(false);
             GameManager.Instance.canvasAlpha = childImg.canvasRenderer.GetAlpha();
+            GameManager.Instance.playTime = 0f;
             loadScene = false;
         }
-        Debug.Log(GameObject.Find("Curtain(Clone)"));
-
     }
 
 
