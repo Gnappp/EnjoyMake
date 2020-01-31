@@ -16,8 +16,9 @@ public class TimeText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!stopTimer)
-            timeText += Time.deltaTime;
+        timeText += Time.deltaTime;
+        if(Time.timeScale==0f)
+            GameManager.Instance.playTime = timeText;
     }
     private void FixedUpdate()
     {

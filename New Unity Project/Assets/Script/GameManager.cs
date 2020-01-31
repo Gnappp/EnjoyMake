@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public float playTime = 0f;
+    public float canvasAlpha = 1f;
 
     private bool gameover;
     private static GameManager instance;
@@ -32,10 +34,12 @@ public class GameManager : MonoBehaviour
         {
             instance = value;
         }
+        
     }
 
     private void Awake()
     {
+        
         var objs = FindObjectsOfType<GameManager>();
         if (objs.Length != 1)
         {
@@ -56,7 +60,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+
     }
 
 
@@ -68,4 +72,6 @@ public class GameManager : MonoBehaviour
     {
         gameover = set_gameover;
     }
+
+    
 }

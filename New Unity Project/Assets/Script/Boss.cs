@@ -9,7 +9,8 @@ public class Boss : MonoBehaviour
     public GameObject solar;
     public GameObject gam;
 
-    private int hp = 2;
+    private int hp = 50;
+
     private GameObject player;
     private bool jumping = true;
     private float jump_time = 0f;
@@ -61,7 +62,6 @@ public class Boss : MonoBehaviour
         {
             float ptr_pos_x = player.transform.position.x - gameObject.transform.position.x;
             rb2d.AddForce(new Vector2(ptr_pos_x / 1.5f, 7.5f), ForceMode2D.Impulse);
-            Debug.Log(ptr_pos_x / 1f + 8f);
             jump_time = 0f;
             jumping = true;
         }

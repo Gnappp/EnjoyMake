@@ -76,8 +76,8 @@ public class Gam : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            clearTime = GameManager.Instance.playTime.ToString();
             Time.timeScale = 0f;
+            clearTime = GameManager.Instance.playTime.ToString();
             StartCoroutine(GetRank());
             Canvas inst = Instantiate(gameclearUI) as Canvas;
             clear = true;
@@ -86,7 +86,7 @@ public class Gam : MonoBehaviour
 
     public void GoMenu()
     {
-        SceneManager.LoadSceneAsync("Start");
+        SceneManager.LoadScene("Start");
         clear = false;
         GameManager.Instance.playTime = 0f;
         Time.timeScale = 1f;
@@ -95,7 +95,7 @@ public class Gam : MonoBehaviour
     public void Restart()
     {
         GameManager.Instance.Set_gameover(false);
-        SceneManager.LoadSceneAsync("Game1");
+        SceneManager.LoadScene("Game1");
         GameManager.Instance.playTime = 0f;
         Time.timeScale = 1f;
     }

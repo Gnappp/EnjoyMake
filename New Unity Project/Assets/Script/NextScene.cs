@@ -6,13 +6,14 @@ using UnityEngine.UI;
 
 public class NextScene : MonoBehaviour
 {
-    public Canvas curtain;
+   
     public Text timeText;
 
+    
     private string nextScene = "Boss";
     private HashSet<Vector3> ranPos;
+    private GameObject curtain;
     private Image childImg;
-    private Color c;
     private bool inPlayer = false;
 
     // Start is called before the first frame update
@@ -20,41 +21,36 @@ public class NextScene : MonoBehaviour
     {
         //ranPos.Add(new Vector3(-16.28f, 2.502f, 0));
         //ranPos.Add(new Vector3(12.312f, 7.108f, 0));
-
+        curtain=GameObject.Find("Curtain(Clone)");
         childImg = curtain.transform.GetChild(0).GetComponent<Image>();
-        c = childImg.color;
-        Debug.Log(childImg.color.a);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (childImg.canvasRenderer.GetAlpha() == 254f && inPlayer)
+        {
+            SceneManager.LoadScene(nextScene);
+            GameManager.Instance.canvasAlpha = childImg.canvasRenderer.GetAlpha();
+            inPlayer = false;
+        }
     }
 
     private void FixedUpdate()
     {
-        if(inPlayer && c.a<1)
-        {
-            c.a += Time.deltaTime /2;
-            childImg.color = c;
-        }
-        else if(inPlayer&&c.a>1)
-        {
-            SceneManager.LoadSceneAsync(nextScene);
-        }
+       
+       
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag=="Player")
         {
+            Time.timeScale = 0f;
+            childImg.canvasRenderer.SetAlpha(1f);
+            childImg.CrossFadeAlpha(254f, 2f, true);
             inPlayer = true;
             Input.ResetInputAxes();
-            collision.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
-            collision.GetComponent<BoxCollider2D>().enabled = false;
-            collision.GetComponent<CapsuleCollider2D>().enabled = false;
-            timeText.GetComponent<TimeText>().StopTimer();
         }
     }
 
