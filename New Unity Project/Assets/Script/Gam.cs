@@ -37,13 +37,11 @@ public class Gam : MonoBehaviour
         public string sql;
     }
 
-    public Text timeText;
-    public InputField inputName;
     public Canvas insertUI;
-    public Canvas gameoverUI;
-    public Text gameoveText;
-    public Text errorText;
+    public Canvas gameclearUI;
 
+    private InputField inputName;
+    private Text errorText;
     private string clearTime;
     private string userName;
     private RankResult data;
@@ -53,17 +51,16 @@ public class Gam : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space) && gameoverUI.gameObject.active)
+        if (Input.GetKeyUp(KeyCode.Space) && clear)
         {
             Restart();
         }
-        else if (Input.GetKeyUp(KeyCode.Escape) && gameoverUI.gameObject.active)
+        else if (Input.GetKeyUp(KeyCode.Escape) && clear)
         {
             GoMenu();
         }
@@ -78,11 +75,10 @@ public class Gam : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            clearTime = timeText.text;
+            clearTime = GameManager.Instance.playTime.ToString();
             Time.timeScale = 0f;
             StartCoroutine(GetRank());
-            gameoverUI.gameObject.SetActive(true);
-            gameoveText.text = "!!CLEAR!!";
+            Canvas inst = Instantiate(gameclearUI) as Canvas;
             clear = true;
         }
     }
@@ -97,7 +93,7 @@ public class Gam : MonoBehaviour
     public void Restart()
     {
         GameManager.Instance.Set_gameover(false);
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+        SceneManager.LoadSceneAsync("Game1");
         Time.timeScale = 1f;
     }
 
@@ -106,7 +102,9 @@ public class Gam : MonoBehaviour
         if (data.rank.Count <10 || data.rank[9].time > float.Parse(clearTime)) //꼴등이 삭제되어야하기때문에 꼴등보다 크면 랭킹진입
         {
             Debug.Log("ranker!");
-            insertUI.gameObject.SetActive(true);
+            Canvas inst = Instantiate(insertUI) as Canvas;
+            inputName = inst.transform.GetChild(0).transform.GetChild(3).GetComponent<InputField>();
+            errorText = inst.transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
         }
     }
 

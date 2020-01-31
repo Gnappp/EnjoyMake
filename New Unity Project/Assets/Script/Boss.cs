@@ -9,7 +9,7 @@ public class Boss : MonoBehaviour
     public GameObject solar;
     public GameObject gam;
 
-    private int hp = 50;
+    private int hp = 2;
     private GameObject player;
     private bool jumping = true;
     private float jump_time = 0f;
@@ -35,9 +35,11 @@ public class Boss : MonoBehaviour
         if(hp<=0)
         {
             DestroyObject(this.gameObject);
-            DestroyObject(solar.gameObject);
-            DestroyObject(seed.gameObject);
-            gam.SetActive(true);
+            DestroyObject(GameObject.Find("Solar(Clone)").gameObject);
+            DestroyObject(GameObject.Find("SolarBomb(Clone)").gameObject);
+            DestroyObject(GameObject.Find("Sead(Clone)").gameObject);
+            GameObject init = Instantiate(gam) as GameObject;
+            init.transform.position = new Vector3(1.88f, 2.064f, 0f);
         }
     }
 
@@ -85,7 +87,8 @@ public class Boss : MonoBehaviour
     {
         if (hp < 25 && gameObject.name != "Boss_Monster_Plant(Clone)" && !solarPhase)
         {
-            solar.SetActive(true);
+            GameObject init = Instantiate(solar) as GameObject;
+            init.transform.position = new Vector3(1.7f, 2.15f, 0f);
             solarPhase = true;
         }
     }

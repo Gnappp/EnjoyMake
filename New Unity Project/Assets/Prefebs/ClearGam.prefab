@@ -140,9 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e27a815bfe4271742bd8b5f7db80b46a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeText: {fileID: 0}
-  inputName: {fileID: 0}
-  insertUI: {fileID: 0}
-  gameoverUI: {fileID: 0}
-  gameoveText: {fileID: 0}
-  errorText: {fileID: 0}
+  insertUI: {fileID: 7595672220338434338, guid: 7ceb45de68fe20443a3f6846cc48db21,
+    type: 3}
+  gameclearUI: {fileID: 148705116460481610, guid: 9df061dbb8820e34cabb334f2d6b804b,
+    type: 3}
