@@ -6,13 +6,17 @@ TagManager:
   tags:
   - Bottom
   - Wall
-  - Monster
   - Bullet
   - Debuff
   - Gam
   - Bush
   - Boss_Plant
   - Trap
+  - Monster_Opossum
+  - Monster_Eagle
+  - Monster_Frog
+  - Mushroom
+  - Monster
   layers:
   - Default
   - TransparentFX

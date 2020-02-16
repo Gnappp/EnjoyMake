@@ -35,12 +35,12 @@ public class GameoverUI : MonoBehaviour
             Time.timeScale = 0f;
             gameoverUI.SetActive(true);
         }
-        else if (Input.GetKeyUp(KeyCode.Space) && gameoverUI.active && GameManager.Instance.Get_gameover())
+        else if (Input.GetKeyUp(KeyCode.Space) && gameoverUI.active && !loadScene)
         {
             sceneName = "Game1";
             FadeScene();
         }
-        else if (Input.GetKeyUp(KeyCode.Escape) && gameoverUI.active && GameManager.Instance.Get_gameover())
+        else if (Input.GetKeyUp(KeyCode.Escape) && gameoverUI.active && !loadScene)
         {
             sceneName = "Menu";
             FadeScene();

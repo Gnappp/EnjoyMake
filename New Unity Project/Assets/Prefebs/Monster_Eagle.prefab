@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8255783133867530639}
   - component: {fileID: 8255783133867530638}
   - component: {fileID: 8255783133867530625}
+  - component: {fileID: -8715102816928985804}
   - component: {fileID: 8255783133867530624}
   m_Layer: 11
   m_Name: Monster_Eagle
@@ -150,6 +151,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.31260216, y: 0.29394323}
   m_EdgeRadius: 0
+--- !u!114 &-8715102816928985804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8255783133867530627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2c788d1fd0a294f92bff70169d3385, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8255783133867530624
 MonoBehaviour:
   m_ObjectHideFlags: 0

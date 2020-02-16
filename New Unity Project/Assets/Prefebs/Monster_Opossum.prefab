@@ -12,8 +12,10 @@ GameObject:
   - component: {fileID: 507903965771744806}
   - component: {fileID: 507903965771744807}
   - component: {fileID: 507903965771744804}
+  - component: {fileID: 6560815727314599998}
   - component: {fileID: 507903965771744805}
   - component: {fileID: 507903965771744802}
+  - component: {fileID: -1326863635108980404}
   m_Layer: 11
   m_Name: Monster_Opossum
   m_TagString: Monster
@@ -30,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 507903965771744803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.581, y: 0.845, z: -3.6613817}
-  m_LocalScale: {x: 0.5, y: 0.45, z: 0.5}
+  m_LocalScale: {x: 0.9, y: 0.7, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -129,6 +131,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.36, y: 0.19817197}
   m_EdgeRadius: 0
+--- !u!114 &6560815727314599998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507903965771744803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2c788d1fd0a294f92bff70169d3385, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &507903965771744805
 Rigidbody2D:
   serializedVersion: 4
@@ -160,5 +174,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8a64867223f85e4499bf3124949ce1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-1326863635108980404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507903965771744803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2c788d1fd0a294f92bff70169d3385, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

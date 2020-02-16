@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Monster_Opossum : MonoBehaviour
 {
+
     private int hp;
     private int life;
     private float deathTime;
@@ -12,7 +13,6 @@ public class Monster_Opossum : MonoBehaviour
     private Animator animator;
     private bool right;
     private bool death;
-    private bool turning=false;
 
 
     // Start is called before the first frame update
@@ -51,28 +51,18 @@ public class Monster_Opossum : MonoBehaviour
 
     private void Moving()
     {
-        bc2d.enabled = false;
+        int layerMask = ~(LayerMask.GetMask("Monster"));
         Vector2 pos_ptr = Vector2.zero;
         if (right)
             pos_ptr = new Vector2(transform.position.x + 0.05f, transform.position.y);
         else if (!right)
             pos_ptr = new Vector2(transform.position.x - 0.05f, transform.position.y);
-        bc2d.enabled = false;
-        RaycastHit2D hit = Physics2D.Raycast(pos_ptr, Vector2.down, 0.5f);
-        bc2d.enabled = true;
-        if (hit.collider == null && !turning)
+        RaycastHit2D hit = Physics2D.Raycast(pos_ptr, Vector2.down, 0.5f, layerMask);
+        if (hit.collider == null )
         {
             right = !(right);
-            turning = true;
         }
-        else if (hit.collider != null)
-        {
-            if (hit.collider.transform.tag == "Bottom" || hit.collider.transform.tag == "Wall")
-            {
-                turning = false;
-            }
-        }
-
+        
         if (right)
         {
             rd2d.velocity = new Vector2(1f, rd2d.velocity.y);
@@ -122,5 +112,10 @@ public class Monster_Opossum : MonoBehaviour
             animator.SetBool("Death", true);
             DestroyObject(this.gameObject,0.5f);
         }
+    }
+
+    public void Test_Debug()
+    {
+        Debug.Log("RRRR");
     }
 }

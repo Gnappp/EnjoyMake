@@ -80,6 +80,11 @@ public class Bush : MonoBehaviour
             if (hidebush.obj.gameObject == collision.gameObject)
             {
                 Vector3Int cellPos = tileMap.WorldToCell(collision.transform.position);
+                if(collision.tag=="Monster")
+                {
+                    Debug.Log(cellPos);
+                    Debug.Log(tileMap.GetTile(cellPos));
+                }
                 if (hidebush.objectPos == Vector3Int.zero && tileMap.GetTile(cellPos) != null)
                 {
                     hidebush.objectPos = cellPos;

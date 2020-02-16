@@ -8,7 +8,7 @@ public class NextScene : MonoBehaviour
 {
    
     public Text timeText;
-
+    public Vector3[] randomDoorPos;
     
     private string nextScene = "Boss";
     private HashSet<Vector3> ranPos;
@@ -23,6 +23,7 @@ public class NextScene : MonoBehaviour
         //ranPos.Add(new Vector3(12.312f, 7.108f, 0));
         curtain=GameObject.Find("Curtain(Clone)");
         childImg = curtain.transform.GetChild(0).GetComponent<Image>();
+        gameObject.transform.position = randomDoorPos[Random.Range(0, 1)];
     }
 
     // Update is called once per frame

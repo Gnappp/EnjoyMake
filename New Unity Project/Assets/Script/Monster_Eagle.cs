@@ -51,13 +51,17 @@ public class Monster_Eagle : MonoBehaviour
             else if (!right)
                 pos_ptr = new Vector2(transform.position.x - 0.1f, transform.position.y);
 
-            bc2d.enabled = false;
-            RaycastHit2D hit = Physics2D.Raycast(pos_ptr, Vector2.down, 0.5f);
-            bc2d.enabled = true;
+            int layerMask = ~(LayerMask.GetMask("Monster"));
+            RaycastHit2D hit = Physics2D.Raycast(pos_ptr, Vector2.down, 0.5f,layerMask);
             if (hit.collider == null && !turning)
             {
                 rd2d.velocity = Vector2.zero;
                 turning = true;
+                posTime += 0.3f;
+                if (right)
+                    right = false;
+                else if (!right)
+                    right = true;
             }
             else if (hit.collider != null)
             {
@@ -95,6 +99,8 @@ public class Monster_Eagle : MonoBehaviour
             }
         }
 
+       
+
         if(findPlayer)
         {
             if(right)
@@ -121,9 +127,8 @@ public class Monster_Eagle : MonoBehaviour
         RaycastHit2D hit;
         if (!findPlayer)
         {
-            bc2d.enabled = false;
-            hit = Physics2D.Raycast(transform.position, vec, 1.5f);
-            bc2d.enabled = true;
+            int layerMask = ~(LayerMask.GetMask("Monster"));
+            hit = Physics2D.Raycast(transform.position, vec, 1.5f,layerMask);
             if (hit.collider != null)
             {
                 if (hit.collider.tag == "Player")

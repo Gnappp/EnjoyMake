@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
                     switch (de.Name)
                     {
                         case "RightLeftReverse":
-                            speed = 1f;
+                            speed = 50f;
                             break;
                         case "Paralysis":
                             rb2.constraints = RigidbodyConstraints2D.None;
@@ -147,7 +147,7 @@ public class Player : MonoBehaviour
                 switch(de.Name)
                 {
                     case "RightLeftReverse":
-                        speed = -1f;
+                        speed = 25f;
                         break;
                     case "Paralysis":
                         rb2.constraints = RigidbodyConstraints2D.FreezeAll;

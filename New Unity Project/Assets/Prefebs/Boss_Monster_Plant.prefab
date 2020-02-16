@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8740089337758758901}
   - component: {fileID: 8621543891542332082}
   - component: {fileID: 8596028915133138808}
+  - component: {fileID: 8391510269938551152}
   m_Layer: 13
   m_Name: Boss_Monster_Plant
   m_TagString: Monster
@@ -166,3 +167,15 @@ MonoBehaviour:
   seed: {fileID: 3337818416094314130, guid: 70a51e4a6cd5411499ec07cf6e5d32db, type: 3}
   solar: {fileID: 1676460903174539224, guid: 8dc58e9b7425b1f4cb0af0b291c26784, type: 3}
   gam: {fileID: 6912052296731659064, guid: 7f94e1c1ee5ec4a47b0bd0f3e4403c44, type: 3}
+--- !u!114 &8391510269938551152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8596028915133138815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2c788d1fd0a294f92bff70169d3385, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
