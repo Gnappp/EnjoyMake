@@ -21,14 +21,19 @@ public class NextScene : MonoBehaviour
     {
         //ranPos.Add(new Vector3(-16.28f, 2.502f, 0));
         //ranPos.Add(new Vector3(12.312f, 7.108f, 0));
-        curtain=GameObject.Find("Curtain(Clone)");
-        childImg = curtain.transform.GetChild(0).GetComponent<Image>();
+        
         gameObject.transform.position = randomDoorPos[Random.Range(0, 1)];
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(curtain==null)
+        {
+            curtain = GameObject.Find("Curtain(Clone)");
+            Debug.Log(curtain);
+            childImg = curtain.transform.GetChild(0).GetComponent<Image>();
+        }
         if (childImg.canvasRenderer.GetAlpha() == 254f && inPlayer)
         {
             SceneManager.LoadScene(nextScene);

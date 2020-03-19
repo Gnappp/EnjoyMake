@@ -17,6 +17,7 @@ public class Boss : MonoBehaviour
     private float createseedTime = 0f;
     private Rigidbody2D rb2d;
     private bool solarPhase = false;
+    private Vector3 startPos;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,7 @@ public class Boss : MonoBehaviour
         rb2d = gameObject.GetComponent<Rigidbody2D>();
         if (gameObject.name == "Boss_Monster_Plant(Clone)")
             hp = 25;
+        startPos = transform.position;
     }
 
     // Update is called once per frame
@@ -103,5 +105,6 @@ public class Boss : MonoBehaviour
             Debug.Log(hp);
         }
     }
+
 
 }

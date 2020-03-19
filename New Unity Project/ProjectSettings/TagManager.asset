@@ -17,6 +17,9 @@ TagManager:
   - Monster_Frog
   - Mushroom
   - Monster
+  - Seed
+  - Boss_Monster_Plant
+  - Fall
   layers:
   - Default
   - TransparentFX

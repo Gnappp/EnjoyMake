@@ -21,7 +21,10 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!(collision.gameObject.layer == 8 || collision.gameObject.layer == 13 || collision.gameObject.tag=="Bush")) //Layer No.8 is Player, No.13 DontDestoryObject
+        int passLayermask = (1 << LayerMask.NameToLayer("Player")) + (1 << LayerMask.NameToLayer("Bush")); //Layer No.8 is Player, No.15 DontDestoryObject, NO.14 Bush
+        passLayermask = ~passLayermask;
+        int attackLayermask = ~((1 << 10) | (1 << 11) | (1 << 13)); //Layer N0.10 DestructiveObject, No.11 Monster, No,13 PassBottomMonster
+        if (!(collision.gameObject.layer == 8 || collision.gameObject.layer == 14 || collision.gameObject.layer == 15))
         {
             DestroyObject(this.gameObject);
         }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6681809253649763575}
   - component: {fileID: 6681809253649763572}
   - component: {fileID: 6681809253649763573}
-  m_Layer: 13
+  m_Layer: 15
   m_Name: Gas 1
   m_TagString: Debuff
   m_Icon: {fileID: 0}

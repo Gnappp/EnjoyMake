@@ -19,6 +19,7 @@ public class Monster_Frog : MonoBehaviour
     private Vector2 idelSize;
     private int hp;
     private GameObject player;
+    private Vector3 startPos;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,7 @@ public class Monster_Frog : MonoBehaviour
         hp = 1;
         right = false;
         player = GameObject.FindWithTag("Player");
+        startPos = transform.position;
     }
 
     // Update is called once per frame
@@ -90,7 +92,7 @@ public class Monster_Frog : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.tag == "Bottom" && animator.GetBool("Down"))
+        if (collision.gameObject.layer==9 && animator.GetBool("Down"))
         {
             animator.SetBool("Down", false);
             idelTime = Time.time;

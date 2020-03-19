@@ -17,6 +17,7 @@ public class Monster_Eagle : MonoBehaviour
     private float posTime;
     private float playerPos;
     private bool turning=false;
+    private Vector3 startPos;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,7 @@ public class Monster_Eagle : MonoBehaviour
         findPlayer = false;
         right = false;
         playerPos = 0f;
+        startPos = transform.position;
     }
 
     // Update is called once per frame

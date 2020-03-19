@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
     private float moveVertical = 0f;
     private float moveHorizontal = 0f;
     private bool crouch;
+    
 
 
 

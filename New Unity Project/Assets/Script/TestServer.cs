@@ -12,6 +12,10 @@ public class TestServer : MonoBehaviour
     public Canvas btnCanvas;
     public Sprite texture;
     public Scene gameScene;
+    public Button gameStartBtn;
+    public Button rankingBtn;
+    public Button quitBtn;
+
     private RankResult data;
     private List<Button> button = new List<Button>();
     private Text btnCanvas_Text;
@@ -59,6 +63,8 @@ public class TestServer : MonoBehaviour
 
         curtain = GameObject.Find("Curtain(Clone)");
         childImg = curtain.transform.GetChild(0).GetComponent<Image>();
+ 
+
     }   
 
     // Update is called once per frame
@@ -128,9 +134,15 @@ public class TestServer : MonoBehaviour
 
     public void GameStart()
     {
+        Debug.Log(Time.timeScale);
         Time.timeScale = 0f;
         childImg.canvasRenderer.SetAlpha(1f);
         childImg.CrossFadeAlpha(254f, 2f, true);
+    }
+
+    public void GameQuit()
+    {
+        Application.Quit();
     }
     
     void ButtonFocus()
@@ -174,6 +186,9 @@ public class TestServer : MonoBehaviour
                     break;
                 case "GameStart":
                     GameStart();
+                    break;
+                case "Quit":
+                    GameQuit();
                     break;
 
             }

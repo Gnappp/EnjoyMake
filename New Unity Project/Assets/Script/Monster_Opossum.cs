@@ -13,6 +13,7 @@ public class Monster_Opossum : MonoBehaviour
     private Animator animator;
     private bool right;
     private bool death;
+    private Vector3 startPos;
 
 
     // Start is called before the first frame update
@@ -25,6 +26,7 @@ public class Monster_Opossum : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
         right = false;
         death = false;
+        startPos = transform.position;
     }
 
     // Update is called once per frame

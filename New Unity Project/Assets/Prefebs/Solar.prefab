@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1676460903174539230}
   - component: {fileID: 1676460903174539225}
   - component: {fileID: 1676460903174539228}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Solar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,11 +123,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1676460903174539231}
     m_Modifications:
-    - target: {fileID: 3748543667992383027, guid: f0dd212cc9bd6ec4d999f76851566863,
-        type: 3}
-      propertyPath: m_Name
-      value: AbsorbEffect
-      objectReference: {fileID: 0}
     - target: {fileID: 3748543667992383436, guid: f0dd212cc9bd6ec4d999f76851566863,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -193,15 +188,30 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3748543667186770342, guid: f0dd212cc9bd6ec4d999f76851566863,
+    - target: {fileID: 3748543667992383027, guid: f0dd212cc9bd6ec4d999f76851566863,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_Name
+      value: AbsorbEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748543667992383027, guid: f0dd212cc9bd6ec4d999f76851566863,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3748543667186770343, guid: f0dd212cc9bd6ec4d999f76851566863,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748543667186770342, guid: f0dd212cc9bd6ec4d999f76851566863,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748543667186770342, guid: f0dd212cc9bd6ec4d999f76851566863,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3748543667186770337, guid: f0dd212cc9bd6ec4d999f76851566863,
         type: 3}

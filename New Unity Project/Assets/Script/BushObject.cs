@@ -17,47 +17,48 @@ public class BushObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 11 || collision.gameObject.layer == 8)
-        {
-            BushAction bushAction = collision.GetComponent<BushAction>();
-            if(!bushAction.Get_hideBush())
-            {
-                sprite.color = Color.green;
-                bushAction.Set_hideBush(true);
-            }
-        }
+        Bush_Enter_Stay(collision);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 11 || collision.gameObject.layer == 8)
-        {
-            BushAction bushAction = collision.GetComponent<BushAction>();
-            if (!bushAction.Get_hideBush())
-            {
-                sprite.color = Color.green;
-                bushAction.Set_hideBush(true);
-            }
-        }
-
+        Bush_Enter_Stay(collision);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 11 || collision.gameObject.layer == 8)
+        Bush_Exit(collision);
+    }
+
+    void Bush_Enter_Stay(Collider2D collision)
+    {
+        if (collision.gameObject.layer == 11 || collision.gameObject.layer == 8 || collision.gameObject.layer == 13)
         {
-            BushAction bushAction = collision.GetComponent<BushAction>();
-            if (bushAction.Get_hideBush())
+            StateAction stateAction = collision.GetComponent<StateAction>();
+            if (!stateAction.Get_hideBush())
             {
-                sprite.color = new Color(255f, 255f, 255f, 1f);
-                bushAction.Set_hideBush(false);
+                sprite.color = Color.green;
+                stateAction.Set_hideBush(true);
             }
         }
     }
-   
+
+    void Bush_Exit(Collider2D collision)
+    {
+        if (collision.gameObject.layer == 11 || collision.gameObject.layer == 8 || collision.gameObject.layer == 13)
+        {
+            StateAction stateAction = collision.GetComponent<StateAction>();
+            if (stateAction.Get_hideBush())
+            {
+                sprite.color = new Color(255f, 255f, 255f, 1f);
+                stateAction.Set_hideBush(false);
+            }
+        }
+    }
+
 }
