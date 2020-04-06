@@ -15,7 +15,7 @@ public class SeedBloom : MonoBehaviour
     private float createDelayTime = 0f;
     private bool createObject = false;
     private float creationBossTime = 0f;
-    private int hp = 5;
+    private int hp = 3;
 
 
     // Start is called before the first frame update

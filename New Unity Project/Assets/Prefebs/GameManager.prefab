@@ -44,4 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playTime: 0
-  cartain: {fileID: 824677599288825068, guid: b663ae0ed6de93e428dd490eea17dffb, type: 3}
+  canvasAlpha: 1
+  insertUI: {fileID: 7595672220338434338, guid: 7ceb45de68fe20443a3f6846cc48db21,
+    type: 3}
+  gameclearUI: {fileID: 148705116460481610, guid: 9df061dbb8820e34cabb334f2d6b804b,
+    type: 3}

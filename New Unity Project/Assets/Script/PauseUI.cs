@@ -16,8 +16,6 @@ public class PauseUI : MonoBehaviour
     private int focusBtn=0;
     private List<Button> button=new List<Button>();
     private int panelNo;
-    private GameObject curtain;
-    private Image childImg;
     private bool loadScene = false;
 
     // Start is called before the first frame update
@@ -37,21 +35,13 @@ public class PauseUI : MonoBehaviour
         {
             button.Add(pauseui.transform.GetChild(panelNo).GetChild(i).GetComponent<Button>());
         }
-
         normalSprite = button[focusBtn].image.sprite;
         button[focusBtn].image.sprite = texture;
-        curtain = GameObject.Find("Curtain(Clone)");
-        childImg = curtain.transform.GetChild(0).GetComponent<Image>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (curtain == null)
-        {
-            curtain = GameObject.Find("Curtain(Clone)");
-            childImg = curtain.transform.GetChild(0).GetComponent<Image>();
-        }
         if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale!=0f)
         {
             if (!pauseui.active)
@@ -62,53 +52,32 @@ public class PauseUI : MonoBehaviour
         }
         else if (pauseui.active && Input.GetKeyDown(KeyCode.Escape))
         {
-            Resume();
+            OnClickResume();
         }
         else if(pauseui.active)
         {
             ButtonFocus();
         }
 
-        if (childImg.canvasRenderer.GetAlpha() == 254f && loadScene)
-        {
-            SceneManager.LoadScene(sceneName);
-            GameManager.Instance.canvasAlpha = childImg.canvasRenderer.GetAlpha();
-            GameManager.Instance.playTime = 0f;
-            loadScene = false;
-        }
 
     }
 
-    public void Restart()
+    public void OnClickRestart()
     {
         pauseui.SetActive(false);
-        sceneName = "Game1";
-        GameManager.Instance.playTime = 0f;
-        Time.timeScale = 0f;
-        childImg.canvasRenderer.SetAlpha(1f);
-        childImg.CrossFadeAlpha(254f, 2f, true);
-        loadScene = true;
-        Debug.Log(GameObject.Find("Curtain(Clone)"));
+        GameManager.Instance.actionManager.Restart();
     }
 
-    public void Resume()
+    public void OnClickResume()
     {
         pauseui.SetActive(false);
-        button[focusBtn].image.sprite = normalSprite;
-        focusBtn = 0;
-        button[focusBtn].image.sprite = texture;
-        Time.timeScale = 1f;
+        GameManager.Instance.actionManager.Resume();
     }
 
-    public void GoMenu()
+    public void OnClickGoMenu()
     {
         pauseui.SetActive(false);
-        sceneName = "Start";
-        GameManager.Instance.playTime = 0f;
-        Time.timeScale = 0f;
-        childImg.canvasRenderer.SetAlpha(1f);
-        childImg.CrossFadeAlpha(254f, 2f, true);
-        loadScene = true;
+        GameManager.Instance.actionManager.GoMenu();
     }
 
     void ButtonFocus()
@@ -148,15 +117,16 @@ public class PauseUI : MonoBehaviour
             switch (button[focusBtn].name)
             {
                 case "Restart":
-                    Restart();
+                    OnClickRestart();
                     break;
                 case "Menu":
-                    GoMenu();
+                    OnClickGoMenu();
                     break;
                 case "Resume":
-                    Resume();
+                    OnClickResume();
                     break;
             }
+            pauseui.SetActive(false);
         }
     }
 

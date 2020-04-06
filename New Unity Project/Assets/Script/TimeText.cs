@@ -11,23 +11,28 @@ public class TimeText : MonoBehaviour
     void Start()
     {
         timeText = GameManager.Instance.playTime;
+        Debug.Log(GameManager.Instance.playTime);
     }
 
     // Update is called once per frame
     void Update()
     {
         timeText += Time.deltaTime;
-        if(Time.timeScale==0f)
-            GameManager.Instance.playTime = timeText;
+        GameManager.Instance.playTime = timeText;
     }
     private void FixedUpdate()
     {
-        gameObject.GetComponent<Text>().text = (timeText).ToString("N3");
+        gameObject.GetComponent<Text>().text = (GameManager.Instance.playTime).ToString("N3");
     }
 
     public float Get_timeText()
     {
         return timeText;
+    }
+
+    public void Reset_timeTest()
+    {
+        
     }
     public void StopTimer()
     {

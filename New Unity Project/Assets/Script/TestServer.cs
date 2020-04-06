@@ -21,8 +21,6 @@ public class TestServer : MonoBehaviour
     private Text btnCanvas_Text;
     private Sprite normalSprite;
     private int focusBtn = 0;
-    private GameObject curtain;
-    private Image childImg;
 
     [Serializable]
     public class RankResult
@@ -61,8 +59,6 @@ public class TestServer : MonoBehaviour
         else
             Debug.Log("Not btnCanvas panel");
 
-        curtain = GameObject.Find("Curtain(Clone)");
-        childImg = curtain.transform.GetChild(0).GetComponent<Image>();
  
 
     }   
@@ -76,11 +72,6 @@ public class TestServer : MonoBehaviour
         {
             if (rankCanvas.gameObject.active)
                 ExitRanking();
-        }
-        if(childImg.canvasRenderer.GetAlpha()==254f)
-        {
-            SceneManager.LoadScene("Game1");
-            GameManager.Instance.canvasAlpha = childImg.canvasRenderer.GetAlpha();
         }
     }
 
@@ -135,9 +126,7 @@ public class TestServer : MonoBehaviour
     public void GameStart()
     {
         Debug.Log(Time.timeScale);
-        Time.timeScale = 0f;
-        childImg.canvasRenderer.SetAlpha(1f);
-        childImg.CrossFadeAlpha(254f, 2f, true);
+        GameManager.Instance.actionManager.Restart();
     }
 
     public void GameQuit()

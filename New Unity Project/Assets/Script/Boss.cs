@@ -9,7 +9,7 @@ public class Boss : MonoBehaviour
     public GameObject solar;
     public GameObject gam;
 
-    private int hp = 50;
+    private int hp = 10;
 
     private GameObject player;
     private bool jumping = true;

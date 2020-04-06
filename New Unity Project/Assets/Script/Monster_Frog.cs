@@ -98,6 +98,17 @@ public class Monster_Frog : MonoBehaviour
             idelTime = Time.time;
             jumping = false;
         }
+        Debug.Log(collision.transform.tag);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 9 && animator.GetBool("Down"))
+        {
+            animator.SetBool("Down", false);
+            idelTime = Time.time;
+            jumping = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

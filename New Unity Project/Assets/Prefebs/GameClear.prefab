@@ -95,7 +95,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8572930713778488733
 RectTransform:
   m_ObjectHideFlags: 0
@@ -254,9 +254,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Press <Space> Restart
-
-    Press <ESC> Menu'
+  m_Text: Press <ESC> Menu
 --- !u!1 &8104046864415963838
 GameObject:
   m_ObjectHideFlags: 0

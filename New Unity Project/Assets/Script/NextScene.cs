@@ -12,8 +12,6 @@ public class NextScene : MonoBehaviour
     
     private string nextScene = "Boss";
     private HashSet<Vector3> ranPos;
-    private GameObject curtain;
-    private Image childImg;
     private bool inPlayer = false;
 
     // Start is called before the first frame update
@@ -28,18 +26,7 @@ public class NextScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(curtain==null)
-        {
-            curtain = GameObject.Find("Curtain(Clone)");
-            Debug.Log(curtain);
-            childImg = curtain.transform.GetChild(0).GetComponent<Image>();
-        }
-        if (childImg.canvasRenderer.GetAlpha() == 254f && inPlayer)
-        {
-            SceneManager.LoadScene(nextScene);
-            GameManager.Instance.canvasAlpha = childImg.canvasRenderer.GetAlpha();
-            inPlayer = false;
-        }
+        
     }
 
     private void FixedUpdate()
@@ -53,9 +40,10 @@ public class NextScene : MonoBehaviour
         if(collision.tag=="Player")
         {
             Time.timeScale = 0f;
-            childImg.canvasRenderer.SetAlpha(1f);
-            childImg.CrossFadeAlpha(254f, 2f, true);
+            //GameManager.Instance.playTime += float.Parse(timeText.text);
             inPlayer = true;
+            SceneManager.LoadScene("Boss");
+            Time.timeScale = 1f;
             Input.ResetInputAxes();
         }
     }
